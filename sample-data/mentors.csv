@@ -1,0 +1,5 @@
+name,email,phone,registrationNumber,yearOfStudy,programme,department,strongModules,interests,hoursPerWeek,maxMentees,crossDepartment
+Grace Achieng,grace.achieng@students.engineering.edu,+254711000101,ENG/M/051/22,4,BSc Civil Engineering,Civil Engineering,Structural Analysis; Soil Mechanics,Football; Volunteering; Reading,4,3,Yes
+Peter Kamau,peter.kamau@students.engineering.edu,+254711000102,ENG/M/052/22,4,BSc Electrical Engineering,Electrical & Electronic Engineering,Circuit Theory; Control Systems,Robotics; Chess; Gaming,3,2,No
+Mary Wambui,mary.wambui@students.engineering.edu,+254711000103,ENG/M/053/23,3,BSc Software Engineering,Computer & Software Engineering,Programming & Data Structures; Engineering Mathematics,Music; Art & Design; Entrepreneurship,5,4,Yes
+Samuel Odhiambo,samuel.odhiambo@students.engineering.edu,+254711000104,ENG/M/054/23,3,BSc Mechanical Engineering,Mechanical Engineering,Thermodynamics; Engineering Drawing,Hiking; Fitness; Photography,2,2,Yes
