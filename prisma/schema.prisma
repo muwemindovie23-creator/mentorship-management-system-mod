@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  MENTEE
+}
+
+enum UserStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PairingStatus {
+  ACTIVE
+  ENDED
+}
+
+enum Audience {
+  ALL
+  MENTORS
+  MENTEES
+}
+
+enum NotificationType {
+  WAITLIST
+  APPROVAL
+  PAIRING
+  SYSTEM
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  passwordHash  String
+  role          Role
+  status        UserStatus @default(PENDING)
+  phone         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  mentorProfile   MentorProfile?
+  menteeProfile   MenteeProfile?
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
+  announcements    Announcement[]
+  meetingsCreated  Meeting[]      @relation("MeetingCreatedBy")
+  notifications    Notification[]
+
+  @@index([role, status])
+  @@index([status])
+}
+
+model Semester {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  startDate        DateTime
+  endDate          DateTime
+  isActive         Boolean  @default(false)
+  registrationOpen Boolean  @default(false)
+  isArchived       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  mentorProfiles MentorProfile[]
+  menteeProfiles MenteeProfile[]
+  pairings       Pairing[]
+  announcements  Announcement[]
+
+  @@index([isActive])
+  @@index([isArchived])
+}
+
+model MentorProfile {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  semesterId         String
+  registrationNumber String
+  yearOfStudy        Int
+  programme          String
+  department         String
+  strongModules      String[]
+  hoursPerWeek       Int
+  maxMentees         Int      @default(3)
+  crossDepartment    Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  semester  Semester        @relation(fields: [semesterId], references: [id])
+  interests MentorInterest[]
+  pairings  Pairing[]
+
+  @@unique([registrationNumber, semesterId])
+  @@index([semesterId])
+  @@index([department])
+}
+
+model MenteeProfile {
+  id                      String    @id @default(cuid())
+  userId                  String    @unique
+  semesterId              String
+  registrationNumber      String
+  programme               String
+  department              String
+  sameDepartmentPreferred Boolean   @default(false)
+  waitlisted              Boolean   @default(false)
+  waitlistedAt            DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  semester  Semester         @relation(fields: [semesterId], references: [id])
+  interests MenteeInterest[]
+  pairings  Pairing[]
+
+  @@unique([registrationNumber, semesterId])
+  @@index([semesterId])
+  @@index([department])
+  @@index([waitlisted])
+}
+
+model Interest {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  isCustom Boolean @default(false)
+
+  mentors MentorInterest[]
+  mentees MenteeInterest[]
+}
+
+model MentorInterest {
+  mentorProfileId String
+  interestId      String
+
+  mentorProfile MentorProfile @relation(fields: [mentorProfileId], references: [id], onDelete: Cascade)
+  interest      Interest      @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  @@id([mentorProfileId, interestId])
+  @@index([interestId])
+}
+
+model MenteeInterest {
+  menteeProfileId String
+  interestId      String
+
+  menteeProfile MenteeProfile @relation(fields: [menteeProfileId], references: [id], onDelete: Cascade)
+  interest      Interest      @relation(fields: [interestId], references: [id], onDelete: Cascade)
+
+  @@id([menteeProfileId, interestId])
+  @@index([interestId])
+}
+
+model Pairing {
+  id              String        @id @default(cuid())
+  mentorProfileId String
+  menteeProfileId String
+  semesterId      String
+  status          PairingStatus @default(ACTIVE)
+  matchScore      Int           @default(0)
+  createdAt       DateTime      @default(now())
+  endedAt         DateTime?
+
+  mentorProfile MentorProfile @relation(fields: [mentorProfileId], references: [id], onDelete: Cascade)
+  menteeProfile MenteeProfile @relation(fields: [menteeProfileId], references: [id], onDelete: Cascade)
+  semester      Semester      @relation(fields: [semesterId], references: [id])
+  meetings      Meeting[]
+
+  @@index([mentorProfileId, status])
+  @@index([menteeProfileId, status])
+  @@index([semesterId, status])
+}
+
+model Meeting {
+  id              String   @id @default(cuid())
+  pairingId       String
+  date            DateTime
+  durationMinutes Int
+  topics          String
+  notes           String?
+  createdById     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  pairing   Pairing @relation(fields: [pairingId], references: [id], onDelete: Cascade)
+  createdBy User    @relation("MeetingCreatedBy", fields: [createdById], references: [id])
+
+  @@index([pairingId])
+  @@index([date])
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  senderId    String
+  recipientId String
+  body        String
+  readAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  sender    User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@index([senderId, recipientId, createdAt])
+  @@index([recipientId, readAt])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  audience    Audience @default(ALL)
+  semesterId  String?
+  createdById String
+  emailSent   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  semester  Semester? @relation(fields: [semesterId], references: [id])
+  createdBy User      @relation(fields: [createdById], references: [id])
+
+  @@index([audience, createdAt])
+  @@index([semesterId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}

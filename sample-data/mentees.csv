@@ -1,0 +1,5 @@
+name,email,phone,registrationNumber,programme,department,sameDepartmentPreferred,interests
+John Mwangi,john.mwangi@students.engineering.edu,+254722000101,ENG/S/201/25,BSc Civil Engineering,Civil Engineering,Yes,Football; Reading
+Faith Chebet,faith.chebet@students.engineering.edu,+254722000102,ENG/S/202/25,BSc Software Engineering,Computer & Software Engineering,No,Music; Gaming; Entrepreneurship
+Kevin Omondi,kevin.omondi@students.engineering.edu,+254722000103,ENG/S/203/25,BSc Electrical Engineering,Electrical & Electronic Engineering,Yes,Robotics; Chess
+Lucy Nyambura,lucy.nyambura@students.engineering.edu,+254722000104,ENG/S/204/25,BSc Mechanical Engineering,Mechanical Engineering,No,Hiking; Photography; Volunteering
