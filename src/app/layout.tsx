@@ -8,11 +8,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Engineering Mentorship",
-    template: "%s · Engineering Mentorship",
+    default: "Menty",
+    template: "%s · Menty",
   },
   description:
-    "Mentorship Management System for the Faculty of Engineering — registration, automated pairing, meetings and messaging.",
+    "Peer Mentorship Management System — registration, automated pairing, meetings and messaging.",
 };
 
 export default function RootLayout({
