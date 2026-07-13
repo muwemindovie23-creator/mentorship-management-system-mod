@@ -84,16 +84,16 @@ export default function LandingPage() {
       <main className="flex-1">
         <section className="container flex flex-col items-center gap-6 py-24 text-center">
           <span className="rounded-full border px-4 py-1 text-sm text-muted-foreground">
-            Faculty of Engineering Mentorship Programme
+            Menty - Peer Mentorship Programme
           </span>
           <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
-            Every engineering student deserves a{" "}
+            Every first year student deserves a{" "}
             <span className="text-primary">great mentor</span>
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground">
             Register as a mentor or mentee, get matched automatically, keep in
             touch, and track every meeting — all in one modern platform built
-            for the Faculty of Engineering.
+            for first year mentees.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button size="lg" asChild>
@@ -123,7 +123,7 @@ export default function LandingPage() {
 
       <footer className="border-t py-6">
         <div className="container text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Menty — Peer Mentorship Program
+          © {new Date().getFullYear()} Menty - Peer Mentorship Program Platform
       
         </div>
       </footer>
