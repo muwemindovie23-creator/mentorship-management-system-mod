@@ -26,19 +26,19 @@ export const PROGRAMMES = [
 ] as const;
 
 export const STRONG_MODULES = [
-  "Engineering Mathematics",
+  "College Algebra",
   "Engineering Drawing",
   "Structural Analysis",
   "Fluid Mechanics",
   "Thermodynamics",
-  "Circuit Theory",
-  "Digital Electronics",
-  "Programming & Data Structures",
+  "Computer Aided Design",
+  "Calculus",
+  "Programming for engineers",
   "Control Systems",
   "Materials Science",
   "Soil Mechanics",
   "Surveying",
-  "Chemical Process Principles",
+  "Statics and Dynamics",
 ] as const;
 
 export const PREDEFINED_INTERESTS = [
