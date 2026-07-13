@@ -159,7 +159,7 @@ export function MessagesClient() {
 
   const whatsapp = buildWhatsAppLink(
     otherUser?.phone,
-    "Hi! Reaching out from the Engineering Mentorship platform."
+    "Hi! Reaching out from Menty, the peer mentorship platform."
   );
 
   return (
