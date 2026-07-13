@@ -123,8 +123,8 @@ export default function LandingPage() {
 
       <footer className="border-t py-6">
         <div className="container text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Faculty of Engineering — Mentorship
-          Management System
+          © {new Date().getFullYear()} Menty — Peer Mentorship Program
+      
         </div>
       </footer>
     </div>
