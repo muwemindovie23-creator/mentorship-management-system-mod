@@ -1,8 +1,8 @@
 {
-  "name": "mentorship-management-system",
+  "name": "Menty",
   "version": "1.0.0",
   "private": true,
-  "description": "Mentorship Management System for the Faculty of Engineering",
+  "description": "Menty - a Mentorship Program Management System",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
