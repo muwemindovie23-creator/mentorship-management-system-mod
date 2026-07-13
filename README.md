@@ -1,4 +1,4 @@
-# Mentorship Management System — Faculty of Engineering
+# Menty
 
 A production-ready web application for managing the Faculty of Engineering
 mentorship programme: mentor/mentee registration with admin approval,
@@ -123,4 +123,4 @@ Default seed credentials (change immediately):
 
 ## License
 
-MIT — built for the Faculty of Engineering mentorship programme.
+MIT — built for Menty, mentorship programme platform.
