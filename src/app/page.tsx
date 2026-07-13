@@ -87,7 +87,7 @@ export default function LandingPage() {
             Menty - Peer Mentorship Programme
           </span>
           <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
-            Every first year student deserves a{" "}
+            Every 1st year student deserves a{" "}
             <span className="text-primary">great mentor</span>
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground">
