@@ -1,7 +1,7 @@
 import { escapeHtml } from "@/lib/sanitize";
 
-const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Engineering Mentorship";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Menty";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://mentorship-management-system-mod.vercel.app";
 
 function layout(title: string, bodyHtml: string): string {
   return `<!DOCTYPE html>
@@ -25,7 +25,7 @@ function layout(title: string, bodyHtml: string): string {
             <tr>
               <td style="padding:16px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;">
                 <p style="margin:0;font-size:12px;color:#64748b;">
-                  Faculty of Engineering Mentorship Programme ·
+                  Menty ·
                   <a href="${APP_URL}" style="color:#1d4ed8;">Open dashboard</a>
                 </p>
               </td>
@@ -50,7 +50,7 @@ export function registrationReceivedEmail(name: string) {
     html: layout(
       "Registration received",
       `<p>Hi ${escapeHtml(name)},</p>
-       <p>Thank you for registering for the Faculty of Engineering mentorship programme.</p>
+       <p>Thank you for registering for Menty - the peer mentorship program app.</p>
        <p>Your account is now <strong>pending approval</strong> by an administrator. You will receive another email as soon as it has been reviewed.</p>`
     ),
   };
