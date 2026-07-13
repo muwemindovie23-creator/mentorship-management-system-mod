@@ -1,26 +1,28 @@
 export const APP_NAME =
-  process.env.NEXT_PUBLIC_APP_NAME ?? "Engineering Mentorship";
+  process.env.NEXT_PUBLIC_APP_NAME ?? "Menty";
 
 export const DEPARTMENTS = [
-  "Civil Engineering",
-  "Mechanical Engineering",
-  "Electrical & Electronic Engineering",
-  "Chemical & Process Engineering",
-  "Computer & Software Engineering",
-  "Agricultural & Biosystems Engineering",
-  "Geospatial & Surveying Engineering",
+  "Civil Department",
+  "Mechanical Department",
+  "Electrical Department",
+  "Mining Department",
 ] as const;
 
 export const PROGRAMMES = [
-  "BSc Civil Engineering",
+  "BSc Civil Engineering Structures",
+  "BSc Civil Engineering Water",
+  "BSc Civil Engineering Transport",
   "BSc Mechanical Engineering",
-  "BSc Electrical Engineering",
-  "BSc Chemical Engineering",
-  "BSc Computer Engineering",
-  "BSc Software Engineering",
-  "BSc Mechatronics Engineering",
-  "BSc Agricultural Engineering",
-  "BSc Geospatial Engineering",
+  "BSc Energy Engineering", 
+  "BSc Automobile Engineering",
+  "BSc Industrial Engineering",
+  "BSc Electrical & Electronics Engineering",
+  "BSc Biomedical Engineering",
+  "BSc Electronics & Computer Engineering",
+  "BSc Electronics & Telecommunications Engineering",
+  "BSc Metallurgy & Mineral Processing Engineering",
+  "BSc Mining Engineering",
+  "BSc Geogical Engineering",
 ] as const;
 
 export const STRONG_MODULES = [
