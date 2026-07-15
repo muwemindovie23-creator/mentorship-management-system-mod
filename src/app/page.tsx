@@ -105,8 +105,8 @@ export default function LandingPage() {
         {/* ---------- Hero (copy updated to match the Figma redesign) ---------- */}
         <section className="container flex flex-col items-center gap-6 py-24 text-center">
           <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-6xl">
-            Menty – The{" "}
-            <span className="text-primary">Peer Mentorship Program Platform</span>
+            Menty {" "}
+            <span className="text-primary">- The Peer Mentorship Program Platform</span>
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground">
             Find a mentor who&apos;s been in your shoes not long ago, your
@@ -123,7 +123,7 @@ export default function LandingPage() {
 
           <div className="relative mt-4 h-64 w-full max-w-4xl overflow-hidden rounded-2xl sm:h-80">
             <Image
-              src="/images/Hero.jpeg"
+              src="/images/Hero.jpg"
               alt="Menty mentorship group"
               fill
               className="object-cover"
@@ -142,7 +142,7 @@ export default function LandingPage() {
               <div className="mt-8 grid gap-8 sm:grid-cols-[220px_1fr] sm:items-center">
                 <div className="relative h-56 w-full overflow-hidden rounded-xl sm:h-full">
                   <Image
-                    src="/images/founder.jpeg"
+                    src="/images/founder.jpg"
                     alt="Muwe, founder of Menty"
                     fill
                     className="object-cover"
@@ -196,7 +196,7 @@ export default function LandingPage() {
           <div className="container grid items-center gap-8 sm:grid-cols-2">
             <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-2xl sm:order-1">
               <Image
-                src="/images/mentees.jpeg"
+                src="/images/mentees.jpg"
                 alt="Mentees learning from senior students"
                 fill
                 className="object-cover"
