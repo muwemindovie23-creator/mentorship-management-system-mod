@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   CalendarCheck,
@@ -120,9 +121,15 @@ export default function LandingPage() {
             </Button>
           </div>
 
-          {/* TODO(functionality): swap for a real hosted hero photo,
-              e.g. <Image src="/images/hero-group.jpg" ... /> from next/image */}
-          <div className="mt-4 h-64 w-full max-w-4xl rounded-2xl bg-muted sm:h-80" />
+          <div className="relative mt-4 h-64 w-full max-w-4xl overflow-hidden rounded-2xl sm:h-80">
+            <Image
+              src="/images/Hero.jpeg"
+              alt="Menty mentorship group"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
         </section>
 
         {/* ---------- New: Why I Created Menty ---------- */}
@@ -133,8 +140,14 @@ export default function LandingPage() {
                 Why I Created <span className="text-primary">{APP_NAME}</span>
               </h2>
               <div className="mt-8 grid gap-8 sm:grid-cols-[220px_1fr] sm:items-center">
-                {/* TODO(functionality): replace with your actual founder photo via next/image */}
-                <div className="h-56 w-full rounded-xl bg-muted sm:h-full" />
+                <div className="relative h-56 w-full overflow-hidden rounded-xl sm:h-full">
+                  <Image
+                    src="/images/founder.jpeg"
+                    alt="Muwe, founder of Menty"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   Hi, I&apos;m Muwe! In 2025, I contested to be the Director of
                   Academics at MUBAS with the motto &quot;Resources for Every
@@ -167,14 +180,28 @@ export default function LandingPage() {
                 <Link href="/register?role=mentor">Volunteer as a mentor</Link>
               </Button>
             </div>
-            <div className="aspect-[4/3] rounded-2xl bg-[radial-gradient(circle,_theme(colors.pink.200),_theme(colors.pink.50)_70%)]" />
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+              <Image
+                src="/images/mentor.jpeg"
+                alt="Mentor sharing experience with students"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
         </section>
 
         {/* ---------- New: Mentee CTA row ---------- */}
         <section className="border-t py-20">
           <div className="container grid items-center gap-8 sm:grid-cols-2">
-            <div className="order-2 aspect-[4/3] rounded-2xl bg-[radial-gradient(circle,_theme(colors.purple.200),_theme(colors.pink.100)_70%)] sm:order-1" />
+            <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-2xl sm:order-1">
+              <Image
+                src="/images/mentees.jpeg"
+                alt="Mentees learning from senior students"
+                fill
+                className="object-cover"
+              />
+            </div>
             <div className="order-1 sm:order-2">
               <h3 className="text-2xl font-bold sm:text-3xl">
                 Learn from senior students
