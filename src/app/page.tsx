@@ -196,7 +196,7 @@ export default function LandingPage() {
           <div className="container grid items-center gap-8 sm:grid-cols-2">
             <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-2xl sm:order-1">
               <Image
-                src="/images/mentees.jpg"
+                src="/images/Mentees.jpg"
                 alt="Mentees learning from senior students"
                 fill
                 className="object-cover"
