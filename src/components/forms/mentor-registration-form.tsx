@@ -104,7 +104,7 @@ export function MentorRegistrationForm() {
                   <FormItem>
                     <FormLabel>Full name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Jane Doe" {...field} />
+                      <Input placeholder="Chikondi Phiri" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -143,7 +143,7 @@ export function MentorRegistrationForm() {
                   <FormItem>
                     <FormLabel>Phone (for WhatsApp)</FormLabel>
                     <FormControl>
-                      <Input placeholder="+254 7xx xxx xxx" {...field} value={field.value ?? ""} />
+                      <Input placeholder="+265 9xx xxx xxx" {...field} value={field.value ?? ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,7 +156,7 @@ export function MentorRegistrationForm() {
                   <FormItem>
                     <FormLabel>Registration number</FormLabel>
                     <FormControl>
-                      <Input placeholder="ENG/M/001/22" {...field} />
+                      <Input placeholder="BEE/22/SS/00x" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
