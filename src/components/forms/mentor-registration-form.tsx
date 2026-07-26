@@ -117,7 +117,7 @@ export function MentorRegistrationForm() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="jane@students.engineering.edu" {...field} />
+                      <Input type="email" placeholder="chikondi@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
