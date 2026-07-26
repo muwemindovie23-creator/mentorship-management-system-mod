@@ -94,7 +94,7 @@ export function MenteeRegistrationForm() {
                   <FormItem>
                     <FormLabel>Full name</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe" {...field} />
+                      <Input placeholder="Chisomo Banda" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +107,7 @@ export function MenteeRegistrationForm() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="john@students.engineering.edu" {...field} />
+                      <Input type="email" placeholder="chisomo@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,7 +133,7 @@ export function MenteeRegistrationForm() {
                   <FormItem>
                     <FormLabel>Phone (for WhatsApp)</FormLabel>
                     <FormControl>
-                      <Input placeholder="+254 7xx xxx xxx" {...field} value={field.value ?? ""} />
+                      <Input placeholder="+265 9xx xxx xxx" {...field} value={field.value ?? ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -146,7 +146,7 @@ export function MenteeRegistrationForm() {
                   <FormItem>
                     <FormLabel>Registration number</FormLabel>
                     <FormControl>
-                      <Input placeholder="ENG/S/101/25" {...field} />
+                      <Input placeholder="BMEN/25/SS/00x" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
