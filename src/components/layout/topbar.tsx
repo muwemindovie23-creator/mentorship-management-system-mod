@@ -24,12 +24,16 @@ interface TopbarProps {
 export function Topbar({ user }: TopbarProps) {
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-background/95 px-4 backdrop-blur md:px-8">
-      <Button variant="outline" size="sm" className="gap-2 text-muted-foreground" asChild>
-        <Link href="/search">
-          <Search className="h-4 w-4" />
-          <span className="hidden sm:inline">Search mentors, mentees, meetings…</span>
-        </Link>
-      </Button>
+            {user.role === "ADMIN" ? (
+        <Button variant="outline" size="sm" className="gap-2 text-muted-foreground" asChild>
+          <Link href="/search">
+            <Search className="h-4 w-4" />
+            <span className="hidden sm:inline">Search mentors, mentees, meetings…</span>
+          </Link>
+        </Button>
+      ) : (
+        <span />
+      )}
 
       <div className="flex items-center gap-2">
         <ThemeToggle />
