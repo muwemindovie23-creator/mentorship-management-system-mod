@@ -62,7 +62,10 @@ export const authConfig = {
       if (pathname.startsWith("/mentor") && user.role !== "MENTOR") {
         return Response.redirect(new URL(roleHome[user.role], request.nextUrl));
       }
-      if (pathname.startsWith("/mentee") && user.role !== "MENTEE") {
+            if (pathname.startsWith("/mentee") && user.role !== "MENTEE") {
+        return Response.redirect(new URL(roleHome[user.role], request.nextUrl));
+      }
+      if (pathname.startsWith("/search") && user.role !== "ADMIN") {
         return Response.redirect(new URL(roleHome[user.role], request.nextUrl));
       }
 
