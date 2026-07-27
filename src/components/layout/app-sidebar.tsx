@@ -44,7 +44,6 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
     { href: "/mentor/meetings", label: "Meetings", icon: CalendarDays },
     { href: "/messages", label: "Messages", icon: MessagesSquare },
     { href: "/announcements", label: "Announcements", icon: Megaphone },
-    { href: "/search", label: "Search", icon: Search },
     { href: "/profile", label: "Profile", icon: Settings },
   ],
   MENTEE: [
@@ -52,7 +51,6 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
     { href: "/mentee/meetings", label: "Meetings", icon: CalendarDays },
     { href: "/messages", label: "Messages", icon: MessagesSquare },
     { href: "/announcements", label: "Announcements", icon: Megaphone },
-    { href: "/search", label: "Search", icon: Search },
     { href: "/profile", label: "Profile", icon: Settings },
   ],
 };
