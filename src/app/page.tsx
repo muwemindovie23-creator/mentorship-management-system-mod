@@ -86,7 +86,7 @@ const faqs = [
   {
     question: "What's in it for me if I volunteer as a mentor?",
     answer:
-      "Menty is recognised by partners like the Malawi Engineering Institute as a platform for excellence and skills-building. Contributing here gives you standing with those partners — a real boost for career growth.",
+      "Menty is recognised by partners like the Malawi Engineering Institute MUBAS Chapter as a platform for excellence and skills-building. Contributing here gives you standing with those partners — a real boost for career growth.",
   },
 ];
 
@@ -143,7 +143,7 @@ export default function LandingPage() {
             </span>
 
             <h1 className="max-w-3xl text-balance font-display text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Find your person on campus
+              Find your guide on campus
             </h1>
             <p className="max-w-xl text-balance text-lg text-white/80">
               Menty pairs you with a fellow student who&apos;s already walked
