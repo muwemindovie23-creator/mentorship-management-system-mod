@@ -10,9 +10,12 @@ export interface SearchResults {
 }
 
 /**
- * Cross-entity search. Admins search everything; mentors/mentees only
- * search their own meetings and messages plus public directory info.
+ * Cross-entity search. Admins search everything, including the mentor/
+ * mentee directory. Mentors and mentees can only search their own
+ * meetings and messages — they never see other users on the platform,
+ * paired or not, to protect participant privacy.
  */
+
 export async function globalSearch(
   query: string,
   userId: string,
@@ -31,28 +34,33 @@ export async function globalSearch(
   const contains = { contains: q, mode: "insensitive" as const };
   const isAdmin = role === "ADMIN";
 
-  const [mentors, mentees, meetings, messages, semesters] = await Promise.all([
-    db.mentorProfile.findMany({
-      where: {
-        user: {
-          status: "APPROVED",
-          OR: [{ name: contains }, { email: contains }],
-        },
-      },
-      include: { user: { select: { name: true, email: true } } },
-      take: 10,
-    }),
-    db.menteeProfile.findMany({
-      where: {
-        user: {
-          status: "APPROVED",
-          OR: [{ name: contains }, { email: contains }],
-        },
-      },
-      include: { user: { select: { name: true, email: true } } },
-      take: 10,
-    }),
+   const [mentors, mentees, meetings, messages, semesters] = await Promise.all([
+    isAdmin
+      ? db.mentorProfile.findMany({
+          where: {
+            user: {
+              status: "APPROVED",
+              OR: [{ name: contains }, { email: contains }],
+            },
+          },
+          include: { user: { select: { name: true, email: true } } },
+          take: 10,
+        })
+      : Promise.resolve([]),
+    isAdmin
+      ? db.menteeProfile.findMany({
+          where: {
+            user: {
+              status: "APPROVED",
+              OR: [{ name: contains }, { email: contains }],
+            },
+          },
+          include: { user: { select: { name: true, email: true } } },
+          take: 10,
+        })
+      : Promise.resolve([]),
     db.meeting.findMany({
+
       where: {
         OR: [{ topics: contains }, { notes: contains }],
         ...(isAdmin
