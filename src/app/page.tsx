@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo } from "@/components/logo";
-import { APP_NAME, DEPARTMENTS } from "@/lib/constants";
+import { APP_NAME } from "@/lib/constants";
 import { MobileNav } from "@/components/landing/mobile-nav";
 import { FaqAccordion } from "@/components/landing/faq-accordion";
 import { Testimonials } from "@/components/landing/testimonials";
@@ -112,20 +112,20 @@ const events = [
   {
     badge: "Workshop",
     title: "Resume & LinkedIn Masterclass",
-    when: "TBA",
-    where: "TBA",
+    when: "Aug 12 · 4:00–6:00 PM",
+    where: "Engineering Block, Room 204",
   },
   {
     badge: "Webinar",
-    title: "Navigating Your First Graceweek",
-    when: "TBA",
-    where: "TBA",
+    title: "Navigating Your First Internship",
+    when: "Aug 19 · 3:00–5:00 PM",
+    where: "Online",
   },
   {
     badge: "Networking",
     title: "Menty Open House",
-    when: "TBA",
-    where: "TBA",
+    when: "Sep 3 · 2:00–4:30 PM",
+    where: "Student Union",
   },
 ];
 
@@ -198,8 +198,21 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        {/* ---------- Hero ---------- */}
-        <section className="relative overflow-hidden bg-mesh-brand">
+               {/* ---------- Hero ---------- */}
+        <section className="relative flex min-h-[640px] items-center overflow-hidden sm:min-h-[720px]">
+          {/* full-bleed photo background */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/Hero.jpg"
+              alt="Menty mentorship group"
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div aria-hidden className="absolute inset-0 bg-mesh-photo-overlay" />
+
           {/* soft arch accents echoing the Menty mark, per brand guide */}
           <div
             aria-hidden
@@ -213,13 +226,15 @@ export default function LandingPage() {
             aria-hidden
             className="pointer-events-none absolute -left-24 top-1/3 h-[260px] w-[260px] rounded-full bg-green/10 blur-2xl"
           />
-          
-          <h1 className="max-w-3xl text-balance font-display text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-6xl sm:leading-[1.02]">
+
+          <div className="container relative flex flex-col items-center gap-7 py-24 text-center sm:py-28">
+            <h1 className="max-w-3xl text-balance font-display text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-6xl sm:leading-[1.02]">
               Find your guide on campus
             </h1>
             <p className="max-w-xl text-balance text-lg text-white/80">
               Menty pairs you with a fellow student who&apos;s already walked
-              your road for guidance that relates to you.
+              your road — for guidance that fits around your week, not the
+              other way around.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -237,50 +252,9 @@ export default function LandingPage() {
                 <Link href="/register?role=mentor">Become a mentor</Link>
               </Button>
             </div>
-
-            <div className="mt-2 flex items-center justify-center gap-8 sm:gap-14">
-              <div>
-                <p className="font-display text-2xl font-extrabold text-white sm:text-3xl">
-                  {DEPARTMENTS.length}
-                </p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-white/50">
-                  Departments
-                </p>
-              </div>
-              <div className="h-9 w-px bg-white/15" />
-              <div>
-                <p className="font-display text-2xl font-extrabold text-white sm:text-3xl">
-                  Free
-                </p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-white/50">
-                  For every mentee
-                </p>
-              </div>
-              <div className="h-9 w-px bg-white/15" />
-              <div>
-                <p className="font-display text-2xl font-extrabold text-white sm:text-3xl">
-                  Vetted
-                </p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-white/50">
-                  Every mentor
-                </p>
-              </div>
-            </div>
-
-            <div className="glass-strong relative mt-6 h-64 w-full max-w-4xl overflow-hidden rounded-3xl p-2 shadow-glass-lg sm:h-80">
-              <div className="relative h-full w-full overflow-hidden rounded-2xl">
-                <Image
-                  src="/images/Hero.jpg"
-                  alt="Menty mentorship group"
-                  fill
-                  sizes="(min-width: 1024px) 896px, 100vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
           </div>
         </section>
+
 
         {/* ---------- About / Positioning ---------- */}
         <section id="about" className="relative overflow-hidden bg-navy py-24">
@@ -376,7 +350,7 @@ export default function LandingPage() {
                 <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-glass-lg">
                   <Image
                     src="/images/founder.jpg"
-                    alt="Muwemi Ndovie, founder of Menty"
+                    alt="Muwe, founder of Menty"
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-cover"
@@ -618,13 +592,13 @@ export default function LandingPage() {
               </p>
               <div className="mt-8 space-y-4">
                 <a
-                  href="mailto:hello@mentymw.org"
+                  href="mailto:hello@menty.org"
                   className="flex items-center gap-4 text-sm font-medium text-navy hover:text-teal dark:text-foreground"
                 >
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
                     <Mail className="h-4 w-4" />
                   </span>
-                  hello@mentymw.org
+                  hello@menty.org
                 </a>
                 <a
                   href="tel:+265000000000"
@@ -633,7 +607,7 @@ export default function LandingPage() {
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
                     <Phone className="h-4 w-4" />
                   </span>
-                  +265 985 370 226
+                  +265 000 000 000
                 </a>
               </div>
             </div>
