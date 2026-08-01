@@ -52,7 +52,7 @@ export function MobileNav() {
               asChild
             >
               <Link href="/login">
-                Get started <ArrowRight className="ml-2 h-4 w-4" />
+                Log In <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
