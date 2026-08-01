@@ -69,6 +69,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--sky))",
           pale: "hsl(var(--sky-pale))",
         },
+        green: {
+          DEFAULT: "hsl(var(--green))",
+          deep: "hsl(var(--green-deep))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -81,6 +85,7 @@ const config: Config = {
         glass: "0 1px 1px 0 rgb(0 0 0 / 0.02), 0 8px 30px -8px rgb(15 23 42 / 0.12)",
         "glass-lg": "0 1px 1px 0 rgb(0 0 0 / 0.02), 0 24px 60px -12px rgb(15 23 42 / 0.22)",
         "glow-teal": "0 8px 30px -8px hsl(var(--teal) / 0.45)",
+        "glow-green": "0 8px 30px -8px hsl(var(--green) / 0.5)",
       },
       keyframes: {
         "accordion-down": {
