@@ -112,20 +112,20 @@ const events = [
   {
     badge: "Workshop",
     title: "Resume & LinkedIn Masterclass",
-    when: "Aug 12 · 4:00–6:00 PM",
-    where: "Engineering Block, Room 204",
+    when: "To be Announced",
+    where: "To be Announced",
   },
   {
     badge: "Webinar",
-    title: "Navigating Your First Internship",
-    when: "Aug 19 · 3:00–5:00 PM",
-    where: "Online",
+    title: "Navigating Your First Graceweek",
+    when: "To be Announced",
+    where: "To be Announced",
   },
   {
     badge: "Networking",
     title: "Menty Open House",
-    when: "Sep 3 · 2:00–4:30 PM",
-    where: "Student Union",
+    when: "To be Announced",
+    where: "To be Announced",
   },
 ];
 
@@ -350,14 +350,14 @@ export default function LandingPage() {
                 <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-glass-lg">
                   <Image
                     src="/images/founder.jpg"
-                    alt="Muwe, founder of Menty"
+                    alt="Muwemi Ndovie, founder of Menty"
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/95 to-transparent p-6 pt-16">
                     <p className="font-display text-lg font-bold text-white">
-                      Muwe
+                      Muwemi Ndovie
                     </p>
                     <p className="text-sm text-white/70">
                       Founder, {APP_NAME}
@@ -592,28 +592,28 @@ export default function LandingPage() {
               </p>
               <div className="mt-8 space-y-4">
                 <a
-                  href="mailto:hello@menty.org"
+                  href="mailto:mentymentors@gmail.com"
                   className="flex items-center gap-4 text-sm font-medium text-navy hover:text-teal dark:text-foreground"
                 >
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
                     <Mail className="h-4 w-4" />
                   </span>
-                  hello@menty.org
+                  mentymentors@gmail.com
                 </a>
                 <a
-                  href="tel:+265000000000"
+                  href="tel:+265985370226"
                   className="flex items-center gap-4 text-sm font-medium text-navy hover:text-teal dark:text-foreground"
                 >
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
                     <Phone className="h-4 w-4" />
                   </span>
-                  +265 000 000 000
+                  +265 985 370 226
                 </a>
               </div>
             </div>
 
             <form
-              action="mailto:hello@menty.org"
+              action="mailto:mentymentors@gmail.com"
               method="post"
               encType="text/plain"
               className="space-y-5 rounded-3xl bg-card p-8 shadow-glass sm:p-10"
