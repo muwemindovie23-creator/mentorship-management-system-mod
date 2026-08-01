@@ -12,6 +12,8 @@ const buttonVariants = cva(
           "rounded-full bg-primary text-primary-foreground shadow-glow-teal hover:bg-teal-deep hover:shadow-glass-lg",
         navy:
           "rounded-full bg-navy text-white shadow-glass hover:bg-navy/90 hover:shadow-glass-lg",
+        accent:
+          "rounded-full bg-green text-navy shadow-glow-green hover:bg-green-deep hover:shadow-glass-lg",
         destructive:
           "rounded-full bg-destructive text-destructive-foreground shadow-glass hover:bg-destructive/90",
         outline:
