@@ -112,20 +112,20 @@ const events = [
   {
     badge: "Workshop",
     title: "Resume & LinkedIn Masterclass",
-    when: "Aug 12 · 4:00–6:00 PM",
-    where: "Engineering Block, Room 204",
+    when: "TBA",
+    where: "TBA",
   },
   {
     badge: "Webinar",
-    title: "Navigating Your First Internship",
-    when: "Aug 19 · 3:00–5:00 PM",
-    where: "Online",
+    title: "Navigating Your First Graceweek",
+    when: "TBA",
+    where: "TBA",
   },
   {
     badge: "Networking",
     title: "Menty Open House",
-    when: "Sep 3 · 2:00–4:30 PM",
-    where: "Student Union",
+    when: "TBA",
+    where: "TBA",
   },
 ];
 
@@ -213,20 +213,13 @@ export default function LandingPage() {
             aria-hidden
             className="pointer-events-none absolute -left-24 top-1/3 h-[260px] w-[260px] rounded-full bg-green/10 blur-2xl"
           />
-
-          <div className="container relative flex flex-col items-center gap-7 py-24 text-center sm:py-28">
-            <span className="glass-strong inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white/90">
-              <span className="h-1.5 w-1.5 rounded-full bg-green" />
-              Est. 2026 · Malawi
-            </span>
-
-            <h1 className="max-w-3xl text-balance font-display text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-6xl sm:leading-[1.02]">
+          
+          <h1 className="max-w-3xl text-balance font-display text-4xl font-extrabold uppercase leading-[1.05] tracking-tight text-white sm:text-6xl sm:leading-[1.02]">
               Find your guide on campus
             </h1>
             <p className="max-w-xl text-balance text-lg text-white/80">
               Menty pairs you with a fellow student who&apos;s already walked
-              your road — for guidance that fits around your week, not the
-              other way around.
+              your road for guidance that relates to you.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -383,7 +376,7 @@ export default function LandingPage() {
                 <div className="relative aspect-[3/4] overflow-hidden rounded-3xl shadow-glass-lg">
                   <Image
                     src="/images/founder.jpg"
-                    alt="Muwe, founder of Menty"
+                    alt="Muwemi Ndovie, founder of Menty"
                     fill
                     sizes="(min-width: 768px) 33vw, 100vw"
                     className="object-cover"
