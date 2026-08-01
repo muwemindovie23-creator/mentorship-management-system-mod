@@ -41,6 +41,7 @@
        tokens above don't cover (gradients, brand-exact accents, etc.) */
     --navy: 239 37% 24%;
     --navy-soft: 235 34% 26%;
+    --navy-fixed: 239 37% 24%;
     --teal: 184 100% 32%;
     --teal-deep: 184 100% 24%;
     --sky: 203 100% 67%;
