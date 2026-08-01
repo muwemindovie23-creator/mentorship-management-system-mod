@@ -37,8 +37,7 @@
     --input: 220 20% 88%;
     --ring: 184 100% 32%;
 
-    /* brand-specific extras, used directly for things Tailwind's semantic
-       tokens above don't cover (gradients, brand-exact accents, etc.) */
+    /* brand-specific extras */
     --navy: 239 37% 24%;
     --navy-soft: 235 34% 26%;
     --navy-fixed: 239 37% 24%;
@@ -89,17 +88,19 @@
     --input: 238 22% 22%;
     --ring: 184 85% 50%;
 
-    --navy: 210 30% 96%;
-    --navy-soft: 220 15% 78%;
+    /* Standard navy text and fixed navy background variable */
+    --navy: 239 37% 24%;
+    --navy-soft: 235 34% 26%;
+    --navy-fixed: 239 37% 24%;
     --teal: 184 85% 48%;
     --teal-deep: 184 85% 40%;
     --sky: 203 100% 70%;
     --sky-pale: 238 20% 18%;
     --green: 88 65% 58%;
-    --green-deep: 88 55% 48%;
+    --green-deep: 88 65% 58%;
 
-    --glass-bg: 240 30% 14%;
-    --glass-border: 210 30% 96%;
+    --glass-bg: 240 28% 11%;
+    --glass-border: 238 22% 20%;
   }
 }
 
@@ -141,7 +142,7 @@
     border: 1px solid hsl(var(--glass-border) / 0.1);
   }
   .glass-dark {
-    background-color: hsl(var(--navy) / 0.55);
+    background-color: hsl(var(--navy-fixed) / 0.55);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid hsl(0 0% 100% / 0.12);
@@ -152,16 +153,15 @@
   .bg-mesh-brand {
     background-image:
       radial-gradient(120% 140% at 12% 8%, hsl(var(--sky) / 0.35) 0%, transparent 55%),
-      radial-gradient(120% 140% at 88% 92%, hsl(var(--navy) / 0.9) 0%, transparent 60%),
-      linear-gradient(125deg, hsl(var(--teal)) 0%, hsl(var(--teal-deep)) 45%, hsl(var(--navy)) 100%);
+      radial-gradient(120% 140% at 88% 92%, hsl(var(--navy-fixed) / 0.9) 0%, transparent 60%),
+      linear-gradient(125deg, hsl(var(--teal)) 0%, hsl(var(--teal-deep)) 45%, hsl(var(--navy-fixed)) 100%);
   }
-    .bg-mesh-photo-overlay {
+  .bg-mesh-photo-overlay {
     background-image:
       radial-gradient(120% 140% at 12% 8%, hsl(var(--sky) / 0.3) 0%, transparent 55%),
-      radial-gradient(120% 140% at 88% 92%, hsl(var(--navy) / 0.8) 0%, transparent 60%),
-      linear-gradient(125deg, hsl(var(--teal) / 0.82) 0%, hsl(var(--teal-deep) / 0.72) 45%, hsl(var(--navy) / 0.9) 100%);
+      radial-gradient(120% 140% at 88% 92%, hsl(var(--navy-fixed) / 0.8) 0%, transparent 60%),
+      linear-gradient(125deg, hsl(var(--teal) / 0.82) 0%, hsl(var(--teal-deep) / 0.72) 45%, hsl(var(--navy-fixed) / 0.9) 100%);
   }
-
   .bg-arch-fade {
     background-image: radial-gradient(closest-side, hsl(var(--sky) / 0.16), transparent 70%);
   }
