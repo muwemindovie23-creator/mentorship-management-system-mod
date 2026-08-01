@@ -45,6 +45,8 @@
     --teal-deep: 184 100% 24%;
     --sky: 203 100% 67%;
     --sky-pale: 205 70% 95%;
+    --green: 88 71% 54%;
+    --green-deep: 88 60% 42%;
 
     --radius: 1rem;
 
@@ -92,6 +94,8 @@
     --teal-deep: 184 85% 40%;
     --sky: 203 100% 70%;
     --sky-pale: 238 20% 18%;
+    --green: 88 65% 58%;
+    --green-deep: 88 55% 48%;
 
     --glass-bg: 240 30% 14%;
     --glass-border: 210 30% 96%;
@@ -154,4 +158,3 @@
     background-image: radial-gradient(closest-side, hsl(var(--sky) / 0.16), transparent 70%);
   }
 }
-
