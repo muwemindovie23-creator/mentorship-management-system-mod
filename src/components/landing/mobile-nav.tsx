@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const links = [
@@ -28,19 +29,33 @@ export function MobileNav() {
       </Button>
 
       {open && (
-        <div className="glass-strong absolute inset-x-0 top-16 z-40 border-b border-border/50 px-6 py-4 animate-fade-in">
+        <div className="glass-strong absolute inset-x-0 top-16 z-40 border-b border-border/50 px-6 py-4 animate-fade-in shadow-lg">
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-muted"
+                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </nav>
+
+          {/* Action button replacing standalone login */}
+          <div className="mt-4 pt-4 border-t border-border/40">
+            <Button
+              variant="accent"
+              className="w-full justify-center"
+              onClick={() => setOpen(false)}
+              asChild
+            >
+              <Link href="/login">
+                Get started <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       )}
     </div>
