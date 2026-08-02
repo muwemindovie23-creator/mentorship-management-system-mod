@@ -233,8 +233,7 @@ export default function LandingPage() {
             </h1>
             <p className="max-w-xl text-balance text-lg text-white/80">
               Menty pairs you with a fellow student who&apos;s already walked
-              your road — for guidance that fits around your week, not the
-              other way around.
+              your road. They know better, so they guide better.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -274,14 +273,14 @@ export default function LandingPage() {
             </div>
             <div className="order-1 md:order-2">
               <p className="text-xs font-bold uppercase tracking-widest text-green">
-                Brand Positioning
+                About
               </p>
               <h2 className="mt-4 font-display text-3xl font-extrabold uppercase leading-tight text-white sm:text-5xl">
                 Experience shouldn&apos;t graduate and disappear
               </h2>
               <p className="mt-6 leading-relaxed text-white/70">
                 The questions that cost first-years months of anxiety — which
-                lecturers to approach, how to pick modules, when to start
+                lecturers to approach, how to study modules, when to start
                 applying for internships — have already been answered by the
                 students two years ahead of them. {APP_NAME} builds the bridge.
               </p>
