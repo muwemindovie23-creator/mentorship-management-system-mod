@@ -34,6 +34,7 @@ Fill in every value:
 | `EMAIL_FROM` | e.g. `Faculty Mentorship <you@gmail.com>` |
 | `CRON_SECRET` | `openssl rand -hex 24` |
 | `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Initial admin credentials |
+| `GOOGLE_SITE_VERIFICATION` | Optional — the `content` value from Google Search Console's HTML-tag verification method (see `docs/DEPLOYMENT.md`) |
 
 ## 3. Create the database schema
 

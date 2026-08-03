@@ -32,13 +32,17 @@
 
    - `DATABASE_URL`, `DIRECT_URL`
    - `AUTH_SECRET` (new random value), `AUTH_TRUST_HOST=true`
-   - `AUTH_URL` = `https://your-app.vercel.app`
+   - `AUTH_URL` = `https://www.mentmw.org`
    - `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`
-   - `NEXT_PUBLIC_APP_URL` = `https://your-app.vercel.app`
+   - `NEXT_PUBLIC_APP_URL` = `https://www.mentmw.org`
    - `NEXT_PUBLIC_APP_NAME`
    - `CRON_SECRET`
 
 4. Deploy. Migrations run during the build against `DIRECT_URL`.
+5. Under Project → Settings → Domains, add `mentmw.org` and
+   `www.mentmw.org`, then set `www.mentmw.org` as the primary domain
+   (the app already 308-redirects the apex to `www` — see
+   `next.config.ts` — so both resolve to one canonical URL for SEO).
 
 ## 4. Cron jobs
 
@@ -69,6 +73,33 @@ Then log in and change anything you need under the admin dashboard.
 - [ ] Register a test mentor + mentee; approve both; verify pairing emails.
 - [ ] Trigger `/api/cron/weekly-reminders` manually with the bearer secret.
 - [ ] Confirm dark mode, CSV export and messaging work on the deployed URL.
+
+## 7. Search engine indexing (Google Search Console)
+
+The app already serves `/robots.txt` and `/sitemap.xml` (generated from
+`src/app/robots.ts` and `src/app/sitemap.ts`) pointing at
+`https://www.mentmw.org`. To get it indexed:
+
+1. Go to <https://search.google.com/search-console> and add a property
+   for `https://www.mentmw.org` (**URL prefix** type).
+2. Verify ownership — easiest is the **HTML tag** method: Search Console
+   gives you a `<meta name="google-site-verification" content="...">`
+   tag. Copy just the `content` value and set it as the
+   `GOOGLE_SITE_VERIFICATION` env var in Vercel, then redeploy —
+   `src/app/layout.tsx` already renders it automatically. (Or use the
+   **DNS TXT record** method instead if you manage `mentmw.org`'s DNS
+   directly — no env var needed either way.)
+3. Once verified, open **Sitemaps** in the left nav and submit
+   `https://www.mentmw.org/sitemap.xml`.
+4. Use **URL Inspection** on `https://www.mentmw.org/` and click
+   **Request indexing** to speed up the first crawl.
+5. Repeat verification for [Bing Webmaster Tools](https://www.bing.com/webmasters)
+   if you also want Bing/Yahoo coverage — it accepts the same sitemap
+   URL and can import verification directly from Search Console.
+
+Indexing itself (Google crawling and ranking the site) is out of this
+repo's control — steps 1–4 above have to be done once, by hand, by
+whoever owns the Search Console account.
 
 ## Scaling notes
 

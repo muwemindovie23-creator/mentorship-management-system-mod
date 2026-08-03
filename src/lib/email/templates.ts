@@ -1,7 +1,7 @@
 import { escapeHtml } from "@/lib/sanitize";
 
 const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Menty";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://mentorship-management-system-mod.vercel.app";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.mentmw.org";
 
 function layout(title: string, bodyHtml: string): string {
   return `<!DOCTYPE html>
@@ -75,6 +75,19 @@ export function accountRejectedEmail(name: string) {
       "Registration not approved",
       `<p>Hi ${escapeHtml(name)},</p>
        <p>Unfortunately your registration for the mentorship programme was not approved at this time. If you believe this is a mistake, please contact the programme coordinator.</p>`
+    ),
+  };
+}
+
+export function passwordResetEmail(name: string, resetUrl: string) {
+  return {
+    subject: `${APP_NAME}: Reset your password`,
+    html: layout(
+      "Reset your password",
+      `<p>Hi ${escapeHtml(name)},</p>
+       <p>We received a request to reset your password. This link expires in 1 hour.</p>
+       ${button(resetUrl, "Reset password")}
+       <p>If you did not request this, you can safely ignore this email — your password will not be changed.</p>`
     ),
   };
 }

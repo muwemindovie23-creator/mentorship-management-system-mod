@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function LoginForm() {
   const router = useRouter();
@@ -105,13 +106,17 @@ export function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Password</FormLabel>
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <FormControl>
-                    <Input
-                      type="password"
-                      autoComplete="current-password"
-                      {...field}
-                    />
+                    <PasswordInput autoComplete="current-password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

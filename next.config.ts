@@ -3,6 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  redirects: async () => [
+    {
+      source: "/:path*",
+      has: [{ type: "host", value: "mentmw.org" }],
+      destination: "https://www.mentmw.org/:path*",
+      permanent: true,
+    },
+  ],
   headers: async () => [
     {
       source: "/(.*)",

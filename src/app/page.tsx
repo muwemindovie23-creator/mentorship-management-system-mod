@@ -154,9 +154,33 @@ const socials = [
   { icon: Linkedin, href: "#", label: "LinkedIn" },
 ];
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: APP_NAME,
+  url: "https://www.mentmw.org",
+  logo: "https://www.mentmw.org/images/menty-logo-full.png",
+  description:
+    "Menty pairs university students with a mentor who's already walked their road — automated matching, weekly check-ins and meeting logs for campus mentorship programmes.",
+  email: "mailto:mentymentors@gmail.com",
+  areaServed: "MW",
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "mentymentors@gmail.com",
+      telephone: "+265985370226",
+    },
+  ],
+};
+
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       {/* ---------- Sticky glass header ---------- */}
       <header className="sticky top-0 z-50 border-b border-border/50">
         <div className="glass relative">

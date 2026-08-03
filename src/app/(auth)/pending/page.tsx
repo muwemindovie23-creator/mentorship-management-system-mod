@@ -9,7 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export const metadata = { title: "Pending approval" };
+export const metadata = {
+  title: "Pending approval",
+  robots: { index: false, follow: false },
+};
 
 export default function PendingPage() {
   return (

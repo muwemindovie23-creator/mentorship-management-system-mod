@@ -56,9 +56,24 @@ model User {
   announcements    Announcement[]
   meetingsCreated  Meeting[]      @relation("MeetingCreatedBy")
   notifications    Notification[]
+  passwordResetTokens PasswordResetToken[]
 
   @@index([role, status])
   @@index([status])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Semester {

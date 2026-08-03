@@ -103,6 +103,18 @@ export type MenteeRegistrationInput = z.infer<typeof menteeRegistrationSchema>;
 export type RegistrationInput = z.infer<typeof registrationSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "Reset token is required"),
+  password: passwordSchema,
+});
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
 // ------------------------------------------------------------------
 // Profiles
 // ------------------------------------------------------------------
