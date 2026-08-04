@@ -1,9 +1,10 @@
 import crypto from "crypto";
 
-const RESET_TOKEN_BYTES = 32;
+const TOKEN_BYTES = 32;
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
+const VERIFICATION_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-export interface ResetToken {
+export interface GeneratedToken {
   /** Raw token sent to the user by email — never stored. */
   token: string;
   /** SHA-256 digest of the token, safe to persist. */
@@ -11,16 +12,24 @@ export interface ResetToken {
   expiresAt: Date;
 }
 
-/** Hash a raw reset token for lookup/storage (tokens are never stored in plaintext). */
-export function hashResetToken(token: string): string {
+/** Hash a raw token for lookup/storage (tokens are never stored in plaintext). */
+export function hashToken(token: string): string {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
-export function generateResetToken(): ResetToken {
-  const token = crypto.randomBytes(RESET_TOKEN_BYTES).toString("hex");
+function generateToken(ttlMs: number): GeneratedToken {
+  const token = crypto.randomBytes(TOKEN_BYTES).toString("hex");
   return {
     token,
-    tokenHash: hashResetToken(token),
-    expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+    tokenHash: hashToken(token),
+    expiresAt: new Date(Date.now() + ttlMs),
   };
+}
+
+export function generateResetToken(): GeneratedToken {
+  return generateToken(RESET_TOKEN_TTL_MS);
+}
+
+export function generateVerificationToken(): GeneratedToken {
+  return generateToken(VERIFICATION_TOKEN_TTL_MS);
 }

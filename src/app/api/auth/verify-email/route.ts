@@ -1,11 +1,10 @@
-import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { resetPasswordSchema } from "@/lib/validators";
+import { verifyEmailSchema } from "@/lib/validators";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { hashToken } from "@/lib/tokens";
 
 export async function POST(req: Request): Promise<Response> {
-  const limit = rateLimit(clientKey(req, "reset-password"), {
+  const limit = rateLimit(clientKey(req, "verify-email"), {
     limit: 10,
     windowMs: 60 * 60 * 1000,
   });
@@ -23,7 +22,7 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const parsed = resetPasswordSchema.safeParse(json);
+  const parsed = verifyEmailSchema.safeParse(json);
   if (!parsed.success) {
     return Response.json(
       { error: "Validation failed", issues: parsed.error.flatten() },
@@ -32,30 +31,29 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const tokenHash = hashToken(parsed.data.token);
-  const resetToken = await db.passwordResetToken.findUnique({
+  const verificationToken = await db.emailVerificationToken.findUnique({
     where: { tokenHash },
   });
 
-  if (!resetToken || resetToken.usedAt || resetToken.expiresAt < new Date()) {
+  if (!verificationToken || verificationToken.expiresAt < new Date()) {
     return Response.json(
-      { error: "This reset link is invalid or has expired." },
+      { error: "This verification link is invalid or has expired." },
       { status: 400 }
     );
   }
 
-  const passwordHash = await bcrypt.hash(parsed.data.password, 12);
-
   await db.$transaction([
     db.user.update({
-      where: { id: resetToken.userId },
-      data: { passwordHash },
+      where: { id: verificationToken.userId },
+      data: { emailVerifiedAt: new Date() },
     }),
-    db.passwordResetToken.deleteMany({
-      where: { userId: resetToken.userId },
+    db.emailVerificationToken.deleteMany({
+      where: { userId: verificationToken.userId },
     }),
   ]);
 
   return Response.json({
-    message: "Your password has been reset. You can now log in.",
+    message:
+      "Email verified. An administrator still needs to approve your account before you can log in.",
   });
 }

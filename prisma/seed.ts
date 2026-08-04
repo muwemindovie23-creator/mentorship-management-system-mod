@@ -51,6 +51,7 @@ async function main() {
       role: Role.ADMIN,
       status: UserStatus.APPROVED,
       phone: "+254700000000",
+      emailVerifiedAt: new Date(),
     },
   });
 
@@ -124,6 +125,7 @@ async function main() {
         passwordHash: samplePasswordHash,
         role: Role.MENTOR,
         status: UserStatus.APPROVED,
+        emailVerifiedAt: new Date(),
       },
     });
 
@@ -209,6 +211,7 @@ async function main() {
         passwordHash: samplePasswordHash,
         role: Role.MENTEE,
         status: m.status,
+        emailVerifiedAt: new Date(),
       },
     });
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -30,12 +31,16 @@ import { PasswordInput } from "@/components/ui/password-input";
 
 export function LoginForm() {
   const router = useRouter();
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [resending, setResending] = useState(false);
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
 
   async function onSubmit(values: LoginInput) {
+    setNeedsVerification(false);
+
     const result = await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -43,15 +48,24 @@ export function LoginForm() {
     });
 
     if (result?.error) {
-      // Distinguish "pending approval" from bad credentials for a
-      // friendlier message (only coarse status is exposed).
+      // Distinguish "pending approval" / "unverified" from bad
+      // credentials for a friendlier message (only coarse status is
+      // exposed).
       try {
         const res = await fetch("/api/register/status", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: values.email }),
         });
-        const { status } = (await res.json()) as { status?: string };
+        const { status, emailVerified } = (await res.json()) as {
+          status?: string;
+          emailVerified?: boolean | null;
+        };
+        if (emailVerified === false) {
+          setNeedsVerification(true);
+          toast.error("Please verify your email before logging in.");
+          return;
+        }
         if (status === "PENDING") {
           router.push("/pending");
           return;
@@ -70,6 +84,24 @@ export function LoginForm() {
     toast.success("Welcome back!");
     router.push("/redirect");
     router.refresh();
+  }
+
+  async function resendVerification() {
+    const email = form.getValues("email");
+    setResending(true);
+    try {
+      const res = await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = (await res.json()) as { message?: string };
+      toast.success(data.message ?? "Verification email sent.");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setResending(false);
+    }
   }
 
   return (
@@ -134,6 +166,18 @@ export function LoginForm() {
               )}
               Log in
             </Button>
+            {needsVerification && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                disabled={resending}
+                onClick={resendVerification}
+              >
+                {resending && <Loader2 className="h-4 w-4 animate-spin" />}
+                Resend verification email
+              </Button>
+            )}
             <p className="text-sm text-muted-foreground">
               No account yet?{" "}
               <Link href="/register" className="text-primary hover:underline">

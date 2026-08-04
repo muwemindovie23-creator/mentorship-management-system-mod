@@ -30,8 +30,11 @@ export async function POST(req: Request): Promise<Response> {
 
   const user = await db.user.findUnique({
     where: { email: parsed.data },
-    select: { status: true },
+    select: { status: true, emailVerifiedAt: true },
   });
 
-  return Response.json({ status: user?.status ?? "UNKNOWN" });
+  return Response.json({
+    status: user?.status ?? "UNKNOWN",
+    emailVerified: user ? Boolean(user.emailVerifiedAt) : null,
+  });
 }

@@ -26,9 +26,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
 
-        // Only approved accounts may log in. Returning null keeps the
-        // reason opaque to the client; the login form checks status via
-        // the register/status endpoint for a friendlier message.
+        // Only verified, approved accounts may log in. Returning null
+        // keeps the reason opaque to the client; the login form checks
+        // status via the register/status endpoint for a friendlier
+        // message.
+        if (!user.emailVerifiedAt) return null;
         if (user.status !== "APPROVED") return null;
 
         return {

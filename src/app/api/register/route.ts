@@ -5,7 +5,8 @@ import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { sanitizeText } from "@/lib/sanitize";
 import { resolveInterestIds } from "@/lib/interests";
 import { sendMail } from "@/lib/email/mailer";
-import { registrationReceivedEmail } from "@/lib/email/templates";
+import { verifyEmailEmail, APP_URL } from "@/lib/email/templates";
+import { generateVerificationToken } from "@/lib/tokens";
 
 export async function POST(req: Request): Promise<Response> {
   const limit = rateLimit(clientKey(req, "register"), {
@@ -139,11 +140,20 @@ export async function POST(req: Request): Promise<Response> {
     return created;
   });
 
-  const mail = registrationReceivedEmail(user.name);
+  const { token, tokenHash, expiresAt } = generateVerificationToken();
+  await db.emailVerificationToken.create({
+    data: { userId: user.id, tokenHash, expiresAt },
+  });
+
+  const verifyUrl = `${APP_URL}/verify-email?token=${token}`;
+  const mail = verifyEmailEmail(user.name, verifyUrl);
   await sendMail({ to: user.email, ...mail });
 
   return Response.json(
-    { message: "Registration received. Your account is pending approval." },
+    {
+      message:
+        "Registration received. Check your email to verify your address — your account will then be reviewed by an administrator.",
+    },
     { status: 201 }
   );
 }

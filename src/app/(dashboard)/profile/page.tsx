@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { PageHeader } from "@/components/layout/page-header";
 import { ProfileForm } from "@/components/forms/profile-form";
+import { ChangePasswordForm } from "@/components/forms/change-password-form";
 
 export const metadata = { title: "Profile" };
 export const dynamic = "force-dynamic";
@@ -43,6 +44,7 @@ export default async function ProfilePage() {
           strongModules: user.mentorProfile?.strongModules ?? [],
         }}
       />
+      <ChangePasswordForm />
     </>
   );
 }

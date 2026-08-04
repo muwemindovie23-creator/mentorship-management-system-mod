@@ -38,7 +38,8 @@ export const authConfig = {
         pathname.startsWith("/register") ||
         pathname.startsWith("/pending") ||
         pathname.startsWith("/forgot-password") ||
-        pathname.startsWith("/reset-password");
+        pathname.startsWith("/reset-password") ||
+        pathname.startsWith("/verify-email");
 
       if (isPublic) {
         return true;

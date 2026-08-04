@@ -44,18 +44,6 @@ function button(href: string, label: string): string {
   </p>`;
 }
 
-export function registrationReceivedEmail(name: string) {
-  return {
-    subject: `${APP_NAME}: Registration received`,
-    html: layout(
-      "Registration received",
-      `<p>Hi ${escapeHtml(name)},</p>
-       <p>Thank you for registering for Menty - the peer mentorship program app.</p>
-       <p>Your account is now <strong>pending approval</strong> by an administrator. You will receive another email as soon as it has been reviewed.</p>`
-    ),
-  };
-}
-
 export function accountApprovedEmail(name: string) {
   return {
     subject: `${APP_NAME}: Your account has been approved`,
@@ -75,6 +63,19 @@ export function accountRejectedEmail(name: string) {
       "Registration not approved",
       `<p>Hi ${escapeHtml(name)},</p>
        <p>Unfortunately your registration for the mentorship programme was not approved at this time. If you believe this is a mistake, please contact the programme coordinator.</p>`
+    ),
+  };
+}
+
+export function verifyEmailEmail(name: string, verifyUrl: string) {
+  return {
+    subject: `${APP_NAME}: Verify your email`,
+    html: layout(
+      "Verify your email",
+      `<p>Hi ${escapeHtml(name)},</p>
+       <p>Thanks for registering for ${escapeHtml(APP_NAME)}. Please verify your email address to continue — this link expires in 24 hours.</p>
+       ${button(verifyUrl, "Verify email")}
+       <p>Once verified, an administrator still needs to review and approve your registration before you can log in. We'll email you again once that happens.</p>`
     ),
   };
 }
