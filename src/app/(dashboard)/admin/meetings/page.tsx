@@ -1,3 +1,4 @@
+import { Video } from "lucide-react";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 import { PageHeader } from "@/components/layout/page-header";
@@ -45,13 +46,14 @@ export default async function AdminMeetingsPage() {
                 <TableHead className="hidden md:table-cell">Duration</TableHead>
                 <TableHead className="hidden lg:table-cell">Topics</TableHead>
                 <TableHead className="hidden xl:table-cell">Notes</TableHead>
+                <TableHead>Zoom</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {meetings.length === 0 && (
                 <TableRow>
                   <TableCell
-                    colSpan={6}
+                    colSpan={7}
                     className="py-8 text-center text-muted-foreground"
                   >
                     No meetings have been logged yet.
@@ -75,6 +77,20 @@ export default async function AdminMeetingsPage() {
                   </TableCell>
                   <TableCell className="hidden max-w-64 truncate xl:table-cell">
                     {meeting.notes ?? "—"}
+                  </TableCell>
+                  <TableCell>
+                    {meeting.zoomJoinUrl ? (
+                      <a
+                        href={meeting.zoomJoinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-primary hover:underline"
+                      >
+                        <Video className="h-3.5 w-3.5" />
+                      </a>
+                    ) : (
+                      "—"
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

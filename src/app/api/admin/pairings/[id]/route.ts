@@ -3,6 +3,7 @@ import { requireSession, errorResponse } from "@/lib/authz";
 import { reassignSchema } from "@/lib/validators";
 import { retryWaitlist } from "@/lib/pairing";
 import { sendMail } from "@/lib/email/mailer";
+import { logAudit } from "@/lib/audit";
 import {
   pairingEmailForMentee,
   pairingEmailForMentor,
@@ -14,7 +15,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
     const { id } = await params;
 
     const parsed = reassignSchema.safeParse(await req.json());
@@ -24,7 +25,10 @@ export async function PATCH(
 
     const pairing = await db.pairing.findUnique({
       where: { id },
-      include: { menteeProfile: { include: { user: true } } },
+      include: {
+        menteeProfile: { include: { user: true } },
+        mentorProfile: { include: { user: true } },
+      },
     });
     if (!pairing || pairing.status !== "ACTIVE") {
       return Response.json({ error: "Active pairing not found" }, { status: 404 });
@@ -91,6 +95,18 @@ export async function PATCH(
     // The old mentor now has a free slot — retry the waitlist.
     await retryWaitlist(pairing.semesterId);
 
+    await logAudit({
+      actorId: session.user.id,
+      action: "pairing.reassign",
+      targetType: "Pairing",
+      targetId: newPairing.id,
+      metadata: {
+        mentee: mentee.name,
+        oldMentor: pairing.mentorProfile.user.name,
+        newMentor: newMentor.user.name,
+      },
+    });
+
     return Response.json({ pairing: newPairing });
   } catch (error) {
     return errorResponse(error);
@@ -103,10 +119,16 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
     const { id } = await params;
 
-    const pairing = await db.pairing.findUnique({ where: { id } });
+    const pairing = await db.pairing.findUnique({
+      where: { id },
+      include: {
+        mentorProfile: { include: { user: true } },
+        menteeProfile: { include: { user: true } },
+      },
+    });
     if (!pairing || pairing.status !== "ACTIVE") {
       return Response.json({ error: "Active pairing not found" }, { status: 404 });
     }
@@ -121,6 +143,17 @@ export async function DELETE(
         data: { waitlisted: true, waitlistedAt: new Date() },
       }),
     ]);
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "pairing.end",
+      targetType: "Pairing",
+      targetId: id,
+      metadata: {
+        mentor: pairing.mentorProfile.user.name,
+        mentee: pairing.menteeProfile.user.name,
+      },
+    });
 
     return Response.json({ message: "Pairing ended; mentee waitlisted" });
   } catch (error) {

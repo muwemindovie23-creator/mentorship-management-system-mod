@@ -39,8 +39,12 @@ function layout(title: string, bodyHtml: string): string {
 }
 
 function button(href: string, label: string): string {
-  return `<p style="margin:24px 0;">
+  return `<p style="margin:24px 0 8px;">
     <a href="${href}" style="background:#1d4ed8;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold;display:inline-block;">${escapeHtml(label)}</a>
+  </p>
+  <p style="margin:0 0 24px;font-size:12px;color:#64748b;">
+    Or paste this link into your browser:<br/>
+    <a href="${href}" style="color:#1d4ed8;word-break:break-all;">${escapeHtml(href)}</a>
   </p>`;
 }
 
@@ -69,26 +73,27 @@ export function accountRejectedEmail(name: string) {
 
 export function verifyEmailEmail(name: string, verifyUrl: string) {
   return {
-    subject: `${APP_NAME}: Verify your email`,
+    subject: `Please verify your ${APP_NAME} email address`,
     html: layout(
       "Verify your email",
       `<p>Hi ${escapeHtml(name)},</p>
-       <p>Thanks for registering for ${escapeHtml(APP_NAME)}. Please verify your email address to continue — this link expires in 24 hours.</p>
-       ${button(verifyUrl, "Verify email")}
-       <p>Once verified, an administrator still needs to review and approve your registration before you can log in. We'll email you again once that happens.</p>`
+       <p>Thanks for registering for ${escapeHtml(APP_NAME)}, the peer mentorship platform. Before we can review your registration, we need to confirm this email address belongs to you.</p>
+       ${button(verifyUrl, "Verify email address")}
+       <p>This link stays valid for 24 hours. Once verified, an administrator will review your registration and email you again once it has been approved.</p>
+       <p>If you did not create an account with ${escapeHtml(APP_NAME)}, you can safely ignore this message.</p>`
     ),
   };
 }
 
 export function passwordResetEmail(name: string, resetUrl: string) {
   return {
-    subject: `${APP_NAME}: Reset your password`,
+    subject: `Reset your ${APP_NAME} password`,
     html: layout(
       "Reset your password",
       `<p>Hi ${escapeHtml(name)},</p>
-       <p>We received a request to reset your password. This link expires in 1 hour.</p>
+       <p>We received a request to reset the password on your ${escapeHtml(APP_NAME)} account. If this was you, choose a new password using the link below, it stays valid for one hour.</p>
        ${button(resetUrl, "Reset password")}
-       <p>If you did not request this, you can safely ignore this email — your password will not be changed.</p>`
+       <p>If you did not request a password reset, no action is needed, your existing password keeps working and this link will simply expire.</p>`
     ),
   };
 }
@@ -127,6 +132,28 @@ export function pairingEmailForMentor(
   };
 }
 
+export function issueReportedEmail(
+  reporterName: string,
+  reporterEmail: string,
+  subject: string,
+  description: string
+) {
+  const paragraphs = description
+    .split(/\n+/)
+    .map((p) => `<p>${escapeHtml(p)}</p>`)
+    .join("");
+  return {
+    subject: `${APP_NAME}: Issue reported — ${subject}`,
+    html: layout(
+      "New issue reported",
+      `<p><strong>${escapeHtml(reporterName)}</strong> (${escapeHtml(reporterEmail)}) reported an issue:</p>
+       <p><strong>${escapeHtml(subject)}</strong></p>
+       ${paragraphs}
+       ${button(`${APP_URL}/admin/issues`, "View issue")}`
+    ),
+  };
+}
+
 export function waitlistAdminEmail(menteeName: string, department: string) {
   return {
     subject: `${APP_NAME}: Mentee waitlisted — no mentor available`,
@@ -158,14 +185,16 @@ export function weeklyReminderEmail(name: string, role: "MENTOR" | "MENTEE") {
 export function meetingReminderEmail(
   name: string,
   otherName: string,
-  when: string
+  when: string,
+  zoomJoinUrl?: string | null
 ) {
   return {
     subject: `${APP_NAME}: Upcoming mentorship meeting`,
     html: layout(
       "Meeting reminder",
       `<p>Hi ${escapeHtml(name)},</p>
-       <p>You have a mentorship meeting with <strong>${escapeHtml(otherName)}</strong> on <strong>${escapeHtml(when)}</strong>.</p>`
+       <p>You have a mentorship meeting with <strong>${escapeHtml(otherName)}</strong> on <strong>${escapeHtml(when)}</strong>.</p>
+       ${zoomJoinUrl ? button(zoomJoinUrl, "Join Zoom meeting") : ""}`
     ),
   };
 }

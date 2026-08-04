@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ArrowLeft,
   Loader2,
   Mail,
   MailOpen,
@@ -165,7 +166,12 @@ export function MessagesClient() {
   return (
     <Card className="grid min-h-[600px] overflow-hidden lg:grid-cols-[320px_1fr]">
       {/* Conversation list */}
-      <div className="flex flex-col border-r">
+      <div
+        className={cn(
+          "flex-col border-r",
+          activeUserId ? "hidden lg:flex" : "flex"
+        )}
+      >
         <div className="space-y-2 border-b p-3">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -234,7 +240,12 @@ export function MessagesClient() {
       </div>
 
       {/* Thread */}
-      <div className="flex flex-col">
+      <div
+        className={cn(
+          "flex-col",
+          activeUserId ? "flex" : "hidden lg:flex"
+        )}
+      >
         {!activeUserId ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-2 text-muted-foreground">
             <MessageCircle className="h-10 w-10" />
@@ -243,11 +254,22 @@ export function MessagesClient() {
         ) : (
           <>
             <div className="flex items-center justify-between border-b p-3">
-              <div>
-                <p className="font-medium">{otherUser?.name ?? "…"}</p>
-                <p className="text-xs text-muted-foreground">
-                  {otherUser?.email}
-                </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="lg:hidden"
+                  aria-label="Back to conversations"
+                  onClick={() => setActiveUserId(null)}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <div>
+                  <p className="font-medium">{otherUser?.name ?? "…"}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {otherUser?.email}
+                  </p>
+                </div>
               </div>
               {/* Quick actions */}
               <div className="flex gap-1">

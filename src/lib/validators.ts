@@ -207,6 +207,25 @@ export const messageSchema = z.object({
 export type MessageInput = z.infer<typeof messageSchema>;
 
 // ------------------------------------------------------------------
+// Issue reports
+// ------------------------------------------------------------------
+
+export const issueReportSchema = z.object({
+  subject: z.string().trim().min(3, "Give it a short title").max(150),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Add a bit more detail")
+    .max(3000),
+});
+
+export type IssueReportInput = z.infer<typeof issueReportSchema>;
+
+export const issueDecisionSchema = z.object({
+  status: z.literal("RESOLVED"),
+});
+
+// ------------------------------------------------------------------
 // Announcements & bulk email
 // ------------------------------------------------------------------
 

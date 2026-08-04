@@ -4,6 +4,7 @@ import { requireSession, errorResponse } from "@/lib/authz";
 import { parseCsvRecords } from "@/lib/csv";
 import { resolveInterestIds } from "@/lib/interests";
 import { normalizeEmail, sanitizeText } from "@/lib/sanitize";
+import { logAudit } from "@/lib/audit";
 import {
   mentorRegistrationSchema,
   menteeRegistrationSchema,
@@ -23,7 +24,7 @@ import {
  */
 export async function POST(req: Request): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
 
     const form = await req.formData();
     const file = form.get("file");
@@ -164,6 +165,17 @@ export async function POST(req: Request): Promise<Response> {
 
       results.created += 1;
     }
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "data.import",
+      metadata: {
+        type,
+        created: results.created,
+        skipped: results.skipped,
+        errorCount: results.errors.length,
+      },
+    });
 
     return Response.json(results);
   } catch (error) {

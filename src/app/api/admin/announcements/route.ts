@@ -4,6 +4,7 @@ import { announcementSchema } from "@/lib/validators";
 import { sanitizeText, sanitizeMultiline } from "@/lib/sanitize";
 import { sendBulkMail } from "@/lib/email/mailer";
 import { announcementEmail } from "@/lib/email/templates";
+import { logAudit } from "@/lib/audit";
 import type { Role } from "@prisma/client";
 
 function audienceRoles(audience: "ALL" | "MENTORS" | "MENTEES"): Role[] {
@@ -52,6 +53,14 @@ export async function POST(req: Request): Promise<Response> {
         mail.html
       );
     }
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "announcement.create",
+      targetType: "Announcement",
+      targetId: announcement.id,
+      metadata: { title: announcement.title, audience, emailSent: sendEmail },
+    });
 
     return Response.json({ announcement }, { status: 201 });
   } catch (error) {

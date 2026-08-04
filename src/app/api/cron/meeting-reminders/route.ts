@@ -34,8 +34,18 @@ export async function GET(req: Request): Promise<Response> {
     const mentee = meeting.pairing.menteeProfile.user;
     const when = formatDateTime(meeting.date);
 
-    const mentorMail = meetingReminderEmail(mentor.name, mentee.name, when);
-    const menteeMail = meetingReminderEmail(mentee.name, mentor.name, when);
+    const mentorMail = meetingReminderEmail(
+      mentor.name,
+      mentee.name,
+      when,
+      meeting.zoomJoinUrl
+    );
+    const menteeMail = meetingReminderEmail(
+      mentee.name,
+      mentor.name,
+      when,
+      meeting.zoomJoinUrl
+    );
 
     if (await sendMail({ to: mentor.email, ...mentorMail })) sent += 1;
     if (await sendMail({ to: mentee.email, ...menteeMail })) sent += 1;

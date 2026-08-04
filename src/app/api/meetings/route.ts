@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { requireSession, errorResponse } from "@/lib/authz";
 import { meetingLogSchema } from "@/lib/validators";
 import { sanitizeText, sanitizeMultiline } from "@/lib/sanitize";
+import { createZoomMeeting } from "@/lib/zoom";
 
 /** GET /api/meetings — meetings visible to the current user. */
 export async function GET(): Promise<Response> {
@@ -54,7 +55,10 @@ export async function POST(req: Request): Promise<Response> {
 
     const pairing = await db.pairing.findUnique({
       where: { id: parsed.data.pairingId },
-      include: { mentorProfile: true },
+      include: {
+        mentorProfile: { include: { user: { select: { name: true } } } },
+        menteeProfile: { include: { user: { select: { name: true } } } },
+      },
     });
     if (!pairing) {
       return Response.json({ error: "Pairing not found" }, { status: 404 });
@@ -68,6 +72,18 @@ export async function POST(req: Request): Promise<Response> {
       return Response.json({ error: "Not your pairing" }, { status: 403 });
     }
 
+    // Only upcoming meetings get a Zoom link — a meeting logged in the
+    // past already happened and has nothing to join. Best-effort: never
+    // blocks meeting creation if Zoom is unconfigured or unreachable.
+    let zoom: { meetingId: string; joinUrl: string } | null = null;
+    if (parsed.data.date > new Date()) {
+      zoom = await createZoomMeeting({
+        topic: `Mentorship meeting: ${pairing.mentorProfile.user.name} & ${pairing.menteeProfile.user.name}`,
+        startTime: parsed.data.date,
+        durationMinutes: parsed.data.durationMinutes,
+      });
+    }
+
     const meeting = await db.meeting.create({
       data: {
         pairingId: pairing.id,
@@ -76,6 +92,8 @@ export async function POST(req: Request): Promise<Response> {
         topics: sanitizeText(parsed.data.topics),
         notes: parsed.data.notes ? sanitizeMultiline(parsed.data.notes) : null,
         createdById: session.user.id,
+        zoomMeetingId: zoom?.meetingId,
+        zoomJoinUrl: zoom?.joinUrl,
       },
     });
 

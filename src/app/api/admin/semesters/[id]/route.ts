@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireSession, errorResponse } from "@/lib/authz";
 import { semesterActionSchema } from "@/lib/validators";
+import { logAudit } from "@/lib/audit";
 
 /**
  * PATCH /api/admin/semesters/:id
@@ -11,7 +12,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
     const { id } = await params;
 
     const parsed = semesterActionSchema.safeParse(await req.json());
@@ -75,6 +76,14 @@ export async function PATCH(
         });
         break;
     }
+
+    await logAudit({
+      actorId: session.user.id,
+      action: `semester.${parsed.data.action}`,
+      targetType: "Semester",
+      targetId: id,
+      metadata: { name: semester.name },
+    });
 
     const updated = await db.semester.findUnique({ where: { id } });
     return Response.json({ semester: updated });

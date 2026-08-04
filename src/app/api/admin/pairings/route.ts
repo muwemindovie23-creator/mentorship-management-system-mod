@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { requireSession, errorResponse } from "@/lib/authz";
 import { manualPairingSchema } from "@/lib/validators";
 import { sendMail } from "@/lib/email/mailer";
+import { logAudit } from "@/lib/audit";
 import {
   pairingEmailForMentee,
   pairingEmailForMentor,
@@ -32,7 +33,7 @@ export async function GET(req: Request): Promise<Response> {
 /** POST /api/admin/pairings — manually create a pairing. */
 export async function POST(req: Request): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
 
     const parsed = manualPairingSchema.safeParse(await req.json());
     if (!parsed.success) {
@@ -120,6 +121,14 @@ export async function POST(req: Request): Promise<Response> {
       sendMail({ to: mentee.user.email, ...menteeMail }),
       sendMail({ to: mentor.user.email, ...mentorMail }),
     ]);
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "pairing.create",
+      targetType: "Pairing",
+      targetId: pairing.id,
+      metadata: { mentor: mentor.user.name, mentee: mentee.user.name },
+    });
 
     return Response.json({ pairing }, { status: 201 });
   } catch (error) {

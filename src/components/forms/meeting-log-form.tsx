@@ -84,7 +84,9 @@ export function MeetingLogForm({ pairings }: MeetingLogFormProps) {
           <CalendarPlus className="h-5 w-5" /> Log a meeting
         </CardTitle>
         <CardDescription>
-          Record what you covered — admins can review all meeting logs.
+          Record what you covered — admins can review all meeting logs. A
+          Zoom link is created automatically for meetings dated in the
+          future.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -114,7 +116,7 @@ export function MeetingLogForm({ pairings }: MeetingLogFormProps) {
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="date"

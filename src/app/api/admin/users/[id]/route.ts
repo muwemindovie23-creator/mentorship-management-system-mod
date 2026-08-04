@@ -3,6 +3,7 @@ import { requireSession, errorResponse } from "@/lib/authz";
 import { userDecisionSchema } from "@/lib/validators";
 import { attemptPairing, retryWaitlist } from "@/lib/pairing";
 import { sendMail } from "@/lib/email/mailer";
+import { logAudit } from "@/lib/audit";
 import {
   accountApprovedEmail,
   accountRejectedEmail,
@@ -38,6 +39,14 @@ export async function PATCH(
 
     const status = parsed.data.action === "approve" ? "APPROVED" : "REJECTED";
     await db.user.update({ where: { id }, data: { status } });
+
+    await logAudit({
+      actorId: session.user.id,
+      action: status === "APPROVED" ? "user.approve" : "user.reject",
+      targetType: "User",
+      targetId: user.id,
+      metadata: { name: user.name, email: user.email, role: user.role },
+    });
 
     let pairing: { status: string } | null = null;
 
@@ -87,6 +96,15 @@ export async function DELETE(
     }
 
     await db.user.delete({ where: { id } });
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "user.delete",
+      targetType: "User",
+      targetId: user.id,
+      metadata: { name: user.name, email: user.email, role: user.role },
+    });
+
     return Response.json({ message: "User deleted" });
   } catch (error) {
     return errorResponse(error);

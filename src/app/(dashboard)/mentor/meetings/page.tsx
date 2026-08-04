@@ -1,3 +1,4 @@
+import { Video } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
@@ -85,6 +86,16 @@ export default async function MentorMeetingsPage() {
                   <span>{formatDate(meeting.date)}</span>
                 </div>
                 <p className="text-muted-foreground">{meeting.topics}</p>
+                {meeting.zoomJoinUrl && (
+                  <a
+                    href={meeting.zoomJoinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  >
+                    <Video className="h-3.5 w-3.5" /> Join Zoom meeting
+                  </a>
+                )}
               </div>
             ))}
           </CardContent>

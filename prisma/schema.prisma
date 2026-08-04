@@ -38,6 +38,11 @@ enum NotificationType {
   SYSTEM
 }
 
+enum IssueStatus {
+  OPEN
+  RESOLVED
+}
+
 model User {
   id              String     @id @default(cuid())
   name            String
@@ -59,6 +64,8 @@ model User {
   notifications    Notification[]
   passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
+  issueReports        IssueReport[]
+  auditLogs           AuditLog[]
 
   @@index([role, status])
   @@index([status])
@@ -219,6 +226,8 @@ model Meeting {
   topics          String
   notes           String?
   createdById     String
+  zoomMeetingId   String?
+  zoomJoinUrl     String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -227,6 +236,36 @@ model Meeting {
 
   @@index([pairingId])
   @@index([date])
+}
+
+model IssueReport {
+  id          String      @id @default(cuid())
+  reporterId  String
+  subject     String
+  description String
+  status      IssueStatus @default(OPEN)
+  createdAt   DateTime    @default(now())
+  resolvedAt  DateTime?
+
+  reporter User @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+  @@index([reporterId])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  action     String
+  targetType String?
+  targetId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  actor User @relation(fields: [actorId], references: [id])
+
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
 }
 
 model Message {

@@ -46,6 +46,12 @@ export async function sendMail({
       subject,
       html,
       text: text ?? html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      // Recognised by most spam filters as a signal of legitimate,
+      // well-behaved automated mail — improves inbox placement even
+      // though this app doesn't have a literal unsubscribe flow.
+      headers: {
+        "List-Unsubscribe": `<mailto:${process.env.SMTP_USER}?subject=unsubscribe>`,
+      },
     });
     return true;
   } catch (error) {

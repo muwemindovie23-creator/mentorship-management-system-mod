@@ -37,6 +37,7 @@
    - `NEXT_PUBLIC_APP_URL` = `https://www.mentmw.org`
    - `NEXT_PUBLIC_APP_NAME`
    - `CRON_SECRET`
+   - `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET` (optional, see step 6 below)
 
 4. Deploy. Migrations run during the build against `DIRECT_URL`.
 5. Under Project → Settings → Domains, add `mentmw.org` and
@@ -67,14 +68,34 @@ npx prisma db seed
 
 Then log in and change anything you need under the admin dashboard.
 
-## 6. Post-deploy checklist
+## 6. Zoom integration (optional)
+
+Meetings logged with a future date automatically get a Zoom link
+(`src/lib/zoom.ts`) — if unconfigured, meeting logging still works, just
+without the link.
+
+1. Go to <https://marketplace.zoom.us/>, sign in with the Zoom account
+   that should host meetings, and create an app of type
+   **Server-to-Server OAuth**.
+2. Grant it a meeting-write scope (`meeting:write:meeting` /
+   `meeting:write:admin` depending on your Zoom account's scope
+   version — the app UI lists what's available).
+3. Copy the **Account ID**, **Client ID** and **Client Secret** it gives
+   you into `ZOOM_ACCOUNT_ID`, `ZOOM_CLIENT_ID`, `ZOOM_CLIENT_SECRET`.
+4. This works on a free/Basic Zoom plan — meetings are created under the
+   one Zoom account you authorized, and 1-on-1 meetings (mentor + mentee)
+   aren't subject to the Basic plan's 40-minute group-meeting cap.
+
+## 7. Post-deploy checklist
 
 - [ ] Log in as admin; create/activate the real semester; open registration.
 - [ ] Register a test mentor + mentee; approve both; verify pairing emails.
 - [ ] Trigger `/api/cron/weekly-reminders` manually with the bearer secret.
 - [ ] Confirm dark mode, CSV export and messaging work on the deployed URL.
+- [ ] Log a future-dated meeting and confirm a Zoom link appears (if configured).
+- [ ] Use "Report an issue" from the account menu and confirm the admin gets the email.
 
-## 7. Search engine indexing (Google Search Console)
+## 8. Search engine indexing (Google Search Console)
 
 The app already serves `/robots.txt` and `/sitemap.xml` (generated from
 `src/app/robots.ts` and `src/app/sitemap.ts`) pointing at

@@ -35,6 +35,7 @@ Fill in every value:
 | `CRON_SECRET` | `openssl rand -hex 24` |
 | `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Initial admin credentials |
 | `GOOGLE_SITE_VERIFICATION` | Optional — the `content` value from Google Search Console's HTML-tag verification method (see `docs/DEPLOYMENT.md`) |
+| `ZOOM_ACCOUNT_ID` / `ZOOM_CLIENT_ID` / `ZOOM_CLIENT_SECRET` | Optional — from a Server-to-Server OAuth app on the [Zoom Marketplace](https://marketplace.zoom.us/) (see `docs/DEPLOYMENT.md`). Without these, meetings still work, just without an auto-created Zoom link. |
 
 ## 3. Create the database schema
 

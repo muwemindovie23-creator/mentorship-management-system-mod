@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireSession, errorResponse } from "@/lib/authz";
 import { toCsv } from "@/lib/csv";
+import { logAudit } from "@/lib/audit";
 
 /**
  * GET /api/admin/export?type=mentors|mentees|pairings|meetings
@@ -8,7 +9,7 @@ import { toCsv } from "@/lib/csv";
  */
 export async function GET(req: Request): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
 
     const url = new URL(req.url);
     const type = url.searchParams.get("type") ?? "mentors";
@@ -130,6 +131,12 @@ export async function GET(req: Request): Promise<Response> {
       default:
         return Response.json({ error: "Unknown export type" }, { status: 400 });
     }
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "data.export",
+      metadata: { type, semesterId },
+    });
 
     return new Response(csv, {
       headers: {

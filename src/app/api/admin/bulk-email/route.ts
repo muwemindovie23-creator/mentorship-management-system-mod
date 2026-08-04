@@ -4,6 +4,7 @@ import { bulkEmailSchema } from "@/lib/validators";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendBulkMail } from "@/lib/email/mailer";
 import { bulkEmail } from "@/lib/email/templates";
+import { logAudit } from "@/lib/audit";
 import type { Role } from "@prisma/client";
 
 export async function POST(req: Request): Promise<Response> {
@@ -47,6 +48,17 @@ export async function POST(req: Request): Promise<Response> {
       mail.subject,
       mail.html
     );
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "email.bulk_send",
+      metadata: {
+        subject: parsed.data.subject,
+        audience: parsed.data.audience,
+        sent: result.sent,
+        failed: result.failed,
+      },
+    });
 
     return Response.json({
       message: `Sent ${result.sent} emails (${result.failed} failed)`,

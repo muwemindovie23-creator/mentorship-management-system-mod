@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { LogOut, Search, User } from "lucide-react";
+import type { Role } from "@prisma/client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,25 +16,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { MobileNavDrawer } from "@/components/layout/mobile-nav-drawer";
 import { getInitials } from "@/lib/utils";
 
 interface TopbarProps {
-  user: { name: string; email: string; role: string };
+  user: { name: string; email: string; role: Role };
 }
 
 export function Topbar({ user }: TopbarProps) {
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-background/95 px-4 backdrop-blur md:px-8">
-            {user.role === "ADMIN" ? (
-        <Button variant="outline" size="sm" className="gap-2 text-muted-foreground" asChild>
-          <Link href="/search">
-            <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">Search mentors, mentees, meetings…</span>
-          </Link>
-        </Button>
-      ) : (
-        <span />
-      )}
+    <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-2 border-b bg-background/95 px-4 backdrop-blur md:px-8">
+      <div className="flex min-w-0 items-center gap-2">
+        <MobileNavDrawer role={user.role} />
+        {user.role === "ADMIN" && (
+          <Button variant="outline" size="sm" className="gap-2 text-muted-foreground" asChild>
+            <Link href="/search">
+              <Search className="h-4 w-4" />
+              <span className="hidden sm:inline">Search mentors, mentees, meetings…</span>
+            </Link>
+          </Button>
+        )}
+      </div>
 
       <div className="flex items-center gap-2">
         <ThemeToggle />

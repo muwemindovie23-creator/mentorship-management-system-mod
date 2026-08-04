@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireSession, errorResponse } from "@/lib/authz";
 import { semesterSchema } from "@/lib/validators";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(): Promise<Response> {
   try {
@@ -19,7 +20,7 @@ export async function GET(): Promise<Response> {
 
 export async function POST(req: Request): Promise<Response> {
   try {
-    await requireSession(["ADMIN"]);
+    const session = await requireSession(["ADMIN"]);
 
     const parsed = semesterSchema.safeParse(await req.json());
     if (!parsed.success) {
@@ -40,6 +41,15 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     const semester = await db.semester.create({ data: parsed.data });
+
+    await logAudit({
+      actorId: session.user.id,
+      action: "semester.create",
+      targetType: "Semester",
+      targetId: semester.id,
+      metadata: { name: semester.name },
+    });
+
     return Response.json({ semester }, { status: 201 });
   } catch (error) {
     return errorResponse(error);
