@@ -168,9 +168,9 @@ export function SemestersManager({ semesters }: { semesters: SemesterRow[] }) {
             className={semester.isActive ? "border-primary" : undefined}
           >
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <CardTitle>{semester.name}</CardTitle>
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
                   {semester.isActive && <Badge>Active</Badge>}
                   {semester.registrationOpen && (
                     <Badge variant="success">Registration open</Badge>
