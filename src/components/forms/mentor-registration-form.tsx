@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import { mentorRegistrationSchema } from "@/lib/validators";
-import { STRONG_MODULES, YEARS_OF_STUDY } from "@/lib/constants";
+import { YEARS_OF_STUDY } from "@/lib/constants";
 import { useCatalog } from "@/hooks/use-catalog";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,7 +51,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function MentorRegistrationForm() {
   const router = useRouter();
-  const { departments, programmes } = useCatalog();
+  const { departments, programmes, strongModules } = useCatalog();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -269,7 +269,7 @@ export function MentorRegistrationForm() {
                     Pick the modules you feel confident helping with.
                   </FormDescription>
                   <div className="grid gap-2 sm:grid-cols-2">
-                    {STRONG_MODULES.map((module) => (
+                    {strongModules.map((module) => (
                       <label
                         key={module}
                         className="flex items-center gap-2 text-sm"

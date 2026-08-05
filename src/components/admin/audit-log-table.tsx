@@ -42,6 +42,7 @@ const CATEGORIES = [
   { value: "department", label: "Departments" },
   { value: "programme", label: "Programmes" },
   { value: "interest", label: "Interests" },
+  { value: "module", label: "Strong modules" },
 ];
 
 function describe(log: AuditLogRow): string {
@@ -92,6 +93,10 @@ function describe(log: AuditLogRow): string {
       return `Added interest "${s("name")}"`;
     case "interest.update":
       return `Updated interest "${s("name")}" (${m.isActive ? "active" : "inactive"})`;
+    case "module.create":
+      return `Added strong module "${s("name")}"`;
+    case "module.update":
+      return `Updated strong module "${s("name")}" (${m.isActive ? "active" : "inactive"})`;
     default:
       return log.action;
   }

@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
 
-/** Public list of active departments & programmes for the registration forms. */
+/** Public list of active departments, programmes & strong modules for the registration forms. */
 export async function GET(): Promise<Response> {
-  const [departments, programmes] = await Promise.all([
+  const [departments, programmes, strongModules] = await Promise.all([
     db.department.findMany({
       where: { isActive: true },
       orderBy: { name: "asc" },
@@ -13,10 +13,16 @@ export async function GET(): Promise<Response> {
       orderBy: { name: "asc" },
       select: { name: true },
     }),
+    db.strongModule.findMany({
+      where: { isActive: true },
+      orderBy: { name: "asc" },
+      select: { name: true },
+    }),
   ]);
 
   return Response.json({
     departments: departments.map((d) => d.name),
     programmes: programmes.map((p) => p.name),
+    strongModules: strongModules.map((m) => m.name),
   });
 }

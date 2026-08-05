@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { z } from "zod";
 import type { Role } from "@prisma/client";
-import { STRONG_MODULES } from "@/lib/constants";
+import { useCatalog } from "@/hooks/use-catalog";
 import { useApiAction } from "@/hooks/use-api";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,6 +63,7 @@ interface ProfileFormProps {
 export function ProfileForm({ initial }: ProfileFormProps) {
   const router = useRouter();
   const { run, pending } = useApiAction();
+  const { strongModules: availableModules } = useCatalog();
   const isMentor = initial.role === "MENTOR";
 
   const form = useForm<FormValues>({
@@ -204,7 +205,7 @@ export function ProfileForm({ initial }: ProfileFormProps) {
                     <FormItem>
                       <FormLabel>Strong modules</FormLabel>
                       <div className="grid gap-2 sm:grid-cols-2">
-                        {STRONG_MODULES.map((module) => (
+                        {availableModules.map((module) => (
                           <label
                             key={module}
                             className="flex items-center gap-2 text-sm"
