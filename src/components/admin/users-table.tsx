@@ -156,132 +156,209 @@ export function UsersTable() {
               <Skeleton key={i} className="h-12 w-full" />
             ))}
           </div>
+        ) : users.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">
+            No users match your filters.
+          </p>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Department
-                </TableHead>
-                <TableHead className="hidden lg:table-cell">
-                  Registered
-                </TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="py-8 text-center text-muted-foreground"
-                  >
-                    No users match your filters.
-                  </TableCell>
-                </TableRow>
-              )}
+          <>
+            {/* Mobile: stacked cards */}
+            <div className="space-y-3 md:hidden">
               {users.map((user) => {
                 const department =
                   user.mentorProfile?.department ??
                   user.menteeProfile?.department ??
                   "—";
                 return (
-                  <TableRow key={user.id}>
-                    <TableCell>
-                      <div className="font-medium">{user.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {user.email}
+                  <div key={user.id} className="rounded-lg border p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="truncate font-medium">{user.name}</p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {user.email}
+                        </p>
                       </div>
-                    </TableCell>
-                    <TableCell>
+                      <StatusBadge status={user.status} />
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-1">
                       <Badge variant="secondary">{user.role}</Badge>
                       {user.menteeProfile?.waitlisted && (
-                        <Badge variant="warning" className="ml-1">
-                          Waitlist
-                        </Badge>
+                        <Badge variant="warning">Waitlist</Badge>
                       )}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {department}
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell">
-                      {formatDate(user.createdAt)}
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge status={user.status} />
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-1">
-                        {user.status === "PENDING" && (
-                          <>
-                            <ConfirmDialog
-                              trigger={
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  disabled={pending}
-                                  aria-label={`Approve ${user.name}`}
-                                >
-                                  {pending ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                  ) : (
-                                    <Check className="h-4 w-4 text-success" />
-                                  )}
-                                </Button>
-                              }
-                              title={`Approve ${user.name}?`}
-                              description="They will be able to log in immediately. Mentees are auto-paired with a mentor if one is available."
-                              confirmLabel="Approve"
-                              onConfirm={() => decide(user.id, "approve")}
-                            />
-                            <ConfirmDialog
-                              trigger={
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  disabled={pending}
-                                  aria-label={`Reject ${user.name}`}
-                                >
-                                  <X className="h-4 w-4 text-destructive" />
-                                </Button>
-                              }
-                              title={`Reject ${user.name}?`}
-                              description="They will be notified by email and will not be able to log in."
-                              confirmLabel="Reject"
-                              destructive
-                              onConfirm={() => decide(user.id, "reject")}
-                            />
-                          </>
-                        )}
-                        {user.role !== "ADMIN" && (
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      {department} · Registered {formatDate(user.createdAt)}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {user.status === "PENDING" && (
+                        <>
                           <ConfirmDialog
                             trigger={
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                disabled={pending}
-                                aria-label={`Delete ${user.name}`}
-                              >
-                                <Trash2 className="h-4 w-4 text-destructive" />
+                              <Button size="sm" variant="outline" disabled={pending}>
+                                {pending ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Check className="h-4 w-4 text-success" />
+                                )}
+                                Approve
                               </Button>
                             }
-                            title={`Delete ${user.name}?`}
-                            description="This permanently removes the account, profile, pairings and messages. This cannot be undone."
-                            confirmLabel="Delete"
-                            destructive
-                            onConfirm={() => remove(user.id)}
+                            title={`Approve ${user.name}?`}
+                            description="They will be able to log in immediately. Mentees are auto-paired with a mentor if one is available."
+                            confirmLabel="Approve"
+                            onConfirm={() => decide(user.id, "approve")}
                           />
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                          <ConfirmDialog
+                            trigger={
+                              <Button size="sm" variant="outline" disabled={pending}>
+                                <X className="h-4 w-4 text-destructive" /> Reject
+                              </Button>
+                            }
+                            title={`Reject ${user.name}?`}
+                            description="They will be notified by email and will not be able to log in."
+                            confirmLabel="Reject"
+                            destructive
+                            onConfirm={() => decide(user.id, "reject")}
+                          />
+                        </>
+                      )}
+                      {user.role !== "ADMIN" && (
+                        <ConfirmDialog
+                          trigger={
+                            <Button size="sm" variant="outline" disabled={pending}>
+                              <Trash2 className="h-4 w-4 text-destructive" /> Delete
+                            </Button>
+                          }
+                          title={`Delete ${user.name}?`}
+                          description="This permanently removes the account, profile, pairings and messages. This cannot be undone."
+                          confirmLabel="Delete"
+                          destructive
+                          onConfirm={() => remove(user.id)}
+                        />
+                      )}
+                    </div>
+                  </div>
                 );
               })}
-            </TableBody>
-          </Table>
+            </div>
+
+            {/* Desktop: table */}
+            <Table className="hidden md:table">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Department
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell">
+                    Registered
+                  </TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((user) => {
+                  const department =
+                    user.mentorProfile?.department ??
+                    user.menteeProfile?.department ??
+                    "—";
+                  return (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        <div className="font-medium">{user.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {user.email}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{user.role}</Badge>
+                        {user.menteeProfile?.waitlisted && (
+                          <Badge variant="warning" className="ml-1">
+                            Waitlist
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {department}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {formatDate(user.createdAt)}
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={user.status} />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          {user.status === "PENDING" && (
+                            <>
+                              <ConfirmDialog
+                                trigger={
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={pending}
+                                    aria-label={`Approve ${user.name}`}
+                                  >
+                                    {pending ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <Check className="h-4 w-4 text-success" />
+                                    )}
+                                  </Button>
+                                }
+                                title={`Approve ${user.name}?`}
+                                description="They will be able to log in immediately. Mentees are auto-paired with a mentor if one is available."
+                                confirmLabel="Approve"
+                                onConfirm={() => decide(user.id, "approve")}
+                              />
+                              <ConfirmDialog
+                                trigger={
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={pending}
+                                    aria-label={`Reject ${user.name}`}
+                                  >
+                                    <X className="h-4 w-4 text-destructive" />
+                                  </Button>
+                                }
+                                title={`Reject ${user.name}?`}
+                                description="They will be notified by email and will not be able to log in."
+                                confirmLabel="Reject"
+                                destructive
+                                onConfirm={() => decide(user.id, "reject")}
+                              />
+                            </>
+                          )}
+                          {user.role !== "ADMIN" && (
+                            <ConfirmDialog
+                              trigger={
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  disabled={pending}
+                                  aria-label={`Delete ${user.name}`}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              }
+                              title={`Delete ${user.name}?`}
+                              description="This permanently removes the account, profile, pairings and messages. This cannot be undone."
+                              confirmLabel="Delete"
+                              destructive
+                              onConfirm={() => remove(user.id)}
+                            />
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </>
         )}
 
         <div className="flex items-center justify-between">

@@ -204,53 +204,36 @@ export function PairingsManager({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Mentee</TableHead>
-                <TableHead>Mentor</TableHead>
-                <TableHead className="hidden md:table-cell">Match</TableHead>
-                <TableHead className="hidden md:table-cell">Meetings</TableHead>
-                <TableHead className="hidden lg:table-cell">Since</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {pairings.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="py-8 text-center text-muted-foreground"
-                  >
-                    No active pairings yet.
-                  </TableCell>
-                </TableRow>
-              )}
-              {pairings.map((pairing) => (
-                <TableRow key={pairing.id}>
-                  <TableCell>
-                    <div className="font-medium">{pairing.menteeName}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {pairing.menteeDepartment}
+          {pairings.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              No active pairings yet.
+            </p>
+          ) : (
+            <>
+              {/* Mobile: stacked cards */}
+              <div className="space-y-3 md:hidden">
+                {pairings.map((pairing) => (
+                  <div key={pairing.id} className="rounded-lg border p-4">
+                    <div>
+                      <p className="font-medium">{pairing.menteeName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {pairing.menteeDepartment}
+                      </p>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="font-medium">{pairing.mentorName}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {pairing.mentorDepartment}
+                    <div className="mt-2 border-t pt-2">
+                      <p className="text-sm">
+                        Mentor: <span className="font-medium">{pairing.mentorName}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {pairing.mentorDepartment}
+                      </p>
                     </div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <Badge variant="secondary">{pairing.matchScore}</Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {pairing.meetings}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {formatDate(pairing.createdAt)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                      <Badge variant="secondary">Match {pairing.matchScore}</Badge>
+                      <span>{pairing.meetings} meetings</span>
+                      <span>Since {formatDate(pairing.createdAt)}</span>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
                       <Dialog
                         open={reassignFor?.id === pairing.id}
                         onOpenChange={(open) => {
@@ -260,8 +243,7 @@ export function PairingsManager({
                       >
                         <DialogTrigger asChild>
                           <Button size="sm" variant="outline">
-                            <ArrowLeftRight className="h-4 w-4" />
-                            <span className="hidden sm:inline">Reassign</span>
+                            <ArrowLeftRight className="h-4 w-4" /> Reassign
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
@@ -287,12 +269,8 @@ export function PairingsManager({
                       </Dialog>
                       <ConfirmDialog
                         trigger={
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            aria-label="End pairing"
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
+                          <Button size="sm" variant="outline">
+                            <Trash2 className="h-4 w-4 text-destructive" /> End pairing
                           </Button>
                         }
                         title={`End pairing for ${pairing.menteeName}?`}
@@ -302,11 +280,106 @@ export function PairingsManager({
                         onConfirm={() => endPairing(pairing.id)}
                       />
                     </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop: table */}
+              <Table className="hidden md:table">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Mentee</TableHead>
+                    <TableHead>Mentor</TableHead>
+                    <TableHead className="hidden md:table-cell">Match</TableHead>
+                    <TableHead className="hidden md:table-cell">Meetings</TableHead>
+                    <TableHead className="hidden lg:table-cell">Since</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pairings.map((pairing) => (
+                    <TableRow key={pairing.id}>
+                      <TableCell>
+                        <div className="font-medium">{pairing.menteeName}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {pairing.menteeDepartment}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="font-medium">{pairing.mentorName}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {pairing.mentorDepartment}
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <Badge variant="secondary">{pairing.matchScore}</Badge>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {pairing.meetings}
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {formatDate(pairing.createdAt)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Dialog
+                            open={reassignFor?.id === pairing.id}
+                            onOpenChange={(open) => {
+                              setReassignFor(open ? pairing : null);
+                              setSelectedMentor("");
+                            }}
+                          >
+                            <DialogTrigger asChild>
+                              <Button size="sm" variant="outline">
+                                <ArrowLeftRight className="h-4 w-4" />
+                                <span className="hidden sm:inline">Reassign</span>
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Reassign {pairing.menteeName}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  The current pairing with {pairing.mentorName}{" "}
+                                  will be ended and both parties notified.
+                                </DialogDescription>
+                              </DialogHeader>
+                              {mentorPicker}
+                              <DialogFooter>
+                                <Button
+                                  onClick={reassign}
+                                  disabled={pending || !selectedMentor}
+                                >
+                                  Reassign
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                          <ConfirmDialog
+                            trigger={
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                aria-label="End pairing"
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            }
+                            title={`End pairing for ${pairing.menteeName}?`}
+                            description="The mentee will be placed back on the waitlist."
+                            confirmLabel="End pairing"
+                            destructive
+                            onConfirm={() => endPairing(pairing.id)}
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

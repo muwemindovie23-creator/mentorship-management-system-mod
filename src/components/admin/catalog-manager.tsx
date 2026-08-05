@@ -174,55 +174,41 @@ export function CatalogManager({
             </div>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="py-8 text-center text-muted-foreground"
-                  >
-                    {items.length === 0
-                      ? `No ${config.label.toLowerCase()} yet.`
-                      : "No matches for your search."}
-                  </TableCell>
-                </TableRow>
-              )}
-              {filtered.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    {editingId === item.id ? (
-                      <Input
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="h-8 max-w-sm"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            void saveEdit(item.id);
-                          }
-                          if (e.key === "Escape") setEditingId(null);
-                        }}
-                      />
-                    ) : (
-                      item.name
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={item.isActive ? "success" : "secondary"}>
-                      {item.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
+          {filtered.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              {items.length === 0
+                ? `No ${config.label.toLowerCase()} yet.`
+                : "No matches for your search."}
+            </p>
+          ) : (
+            <>
+              {/* Mobile: stacked cards */}
+              <div className="space-y-2 md:hidden">
+                {filtered.map((item) => (
+                  <div key={item.id} className="rounded-md border p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      {editingId === item.id ? (
+                        <Input
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="h-8 flex-1"
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              void saveEdit(item.id);
+                            }
+                            if (e.key === "Escape") setEditingId(null);
+                          }}
+                        />
+                      ) : (
+                        <span className="flex-1 truncate text-sm">{item.name}</span>
+                      )}
+                      <Badge variant={item.isActive ? "success" : "secondary"}>
+                        {item.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                    </div>
+                    <div className="mt-2 flex justify-end gap-1">
                       {editingId === item.id ? (
                         <>
                           <Button
@@ -276,11 +262,108 @@ export function CatalogManager({
                         </>
                       )}
                     </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop: table */}
+              <Table className="hidden md:table">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        {editingId === item.id ? (
+                          <Input
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            className="h-8 max-w-sm"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                void saveEdit(item.id);
+                              }
+                              if (e.key === "Escape") setEditingId(null);
+                            }}
+                          />
+                        ) : (
+                          item.name
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={item.isActive ? "success" : "secondary"}>
+                          {item.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          {editingId === item.id ? (
+                            <>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                disabled={pending}
+                                onClick={() => void saveEdit(item.id)}
+                                aria-label="Save"
+                              >
+                                <Check className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => setEditingId(null)}
+                                aria-label="Cancel"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => {
+                                  setEditingId(item.id);
+                                  setEditValue(item.name);
+                                }}
+                                aria-label={`Rename ${item.name}`}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                disabled={pending}
+                                onClick={() => void toggleActive(item)}
+                                aria-label={
+                                  item.isActive
+                                    ? `Deactivate ${item.name}`
+                                    : `Activate ${item.name}`
+                                }
+                              >
+                                {item.isActive ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

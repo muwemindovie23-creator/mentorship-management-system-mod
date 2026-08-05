@@ -174,42 +174,52 @@ export function AuditLogTable() {
               <Skeleton key={i} className="h-12 w-full" />
             ))}
           </div>
+        ) : logs.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">
+            No matching audit entries.
+          </p>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>When</TableHead>
-                <TableHead>Admin</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {logs.length === 0 && (
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="py-8 text-center text-muted-foreground"
-                  >
-                    No matching audit entries.
-                  </TableCell>
-                </TableRow>
-              )}
+          <>
+            {/* Mobile: stacked cards */}
+            <div className="space-y-2 md:hidden">
               {logs.map((log) => (
-                <TableRow key={log.id}>
-                  <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
+                <div key={log.id} className="rounded-md border p-3 text-sm">
+                  <p>{describe(log)}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {log.actor.name} ({log.actor.email}) ·{" "}
                     {formatDateTime(log.createdAt)}
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm font-medium">{log.actor.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {log.actor.email}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-sm">{describe(log)}</TableCell>
-                </TableRow>
+                  </p>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+
+            {/* Desktop: table */}
+            <Table className="hidden md:table">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>When</TableHead>
+                  <TableHead>Admin</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {logs.map((log) => (
+                  <TableRow key={log.id}>
+                    <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
+                      {formatDateTime(log.createdAt)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm font-medium">{log.actor.name}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {log.actor.email}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm">{describe(log)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
         )}
 
         <div className="flex items-center justify-between">

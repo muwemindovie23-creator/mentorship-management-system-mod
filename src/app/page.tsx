@@ -212,7 +212,7 @@ export default function LandingPage() {
               </Button>
               <Button variant="accent" size="sm" asChild>
                 <Link href="/register">
-                  Get started <ArrowRight className="h-4 w-4" />
+                  Get started <ArrowRight className="hidden h-4 w-4 sm:inline" />
                 </Link>
               </Button>
               <MobileNav />
