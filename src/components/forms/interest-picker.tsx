@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, X } from "lucide-react";
-import { PREDEFINED_INTERESTS, MAX_CUSTOM_INTEREST_LENGTH } from "@/lib/constants";
+import { MAX_CUSTOM_INTEREST_LENGTH } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,11 +14,24 @@ interface InterestPickerProps {
 }
 
 /**
- * Multi-select over predefined interests plus free-text custom
+ * Multi-select over admin-curated interests plus free-text custom
  * interests, used by both registration forms and profile editing.
  */
 export function InterestPicker({ value, onChange }: InterestPickerProps) {
   const [custom, setCustom] = useState("");
+  const [predefined, setPredefined] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/interests")
+      .then((res) => (res.ok ? res.json() : { interests: [] }))
+      .then((data: { interests?: { name: string }[] }) => {
+        if (!cancelled) setPredefined((data.interests ?? []).map((i) => i.name));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const toggle = (interest: string) => {
     if (value.includes(interest)) {
@@ -41,13 +54,13 @@ export function InterestPicker({ value, onChange }: InterestPickerProps) {
   };
 
   const customSelected = value.filter(
-    (i) => !PREDEFINED_INTERESTS.some((p) => p.toLowerCase() === i.toLowerCase())
+    (i) => !predefined.some((p) => p.toLowerCase() === i.toLowerCase())
   );
 
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
-        {PREDEFINED_INTERESTS.map((interest) => {
+        {predefined.map((interest) => {
           const selected = value.includes(interest);
           return (
             <button

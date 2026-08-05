@@ -26,24 +26,25 @@ export const dynamic = "force-dynamic";
 export default async function MentorMeetingsPage() {
   const session = await auth();
 
-  const pairings = await db.pairing.findMany({
-    where: { status: "ACTIVE", mentorProfile: { userId: session!.user.id } },
-    include: {
-      menteeProfile: { include: { user: { select: { name: true } } } },
-    },
-  });
-
-  const meetings = await db.meeting.findMany({
-    where: { pairing: { mentorProfile: { userId: session!.user.id } } },
-    include: {
-      pairing: {
-        include: {
-          menteeProfile: { include: { user: { select: { name: true } } } },
+  const [pairings, meetings] = await Promise.all([
+    db.pairing.findMany({
+      where: { status: "ACTIVE", mentorProfile: { userId: session!.user.id } },
+      include: {
+        menteeProfile: { include: { user: { select: { name: true } } } },
+      },
+    }),
+    db.meeting.findMany({
+      where: { pairing: { mentorProfile: { userId: session!.user.id } } },
+      include: {
+        pairing: {
+          include: {
+            menteeProfile: { include: { user: { select: { name: true } } } },
+          },
         },
       },
-    },
-    orderBy: { date: "desc" },
-  });
+      orderBy: { date: "desc" },
+    }),
+  ]);
 
   const now = new Date();
   const upcoming = meetings.filter((m) => m.date > now);

@@ -5,11 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import {
-  menteeRegistrationSchema,
-  type MenteeRegistrationInput,
-} from "@/lib/validators";
-import { DEPARTMENTS, PROGRAMMES } from "@/lib/constants";
+import { z } from "zod";
+import { menteeRegistrationSchema } from "@/lib/validators";
+import { useCatalog } from "@/hooks/use-catalog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,15 +38,26 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { InterestPicker } from "@/components/forms/interest-picker";
 
+const formSchema = menteeRegistrationSchema
+  .extend({ confirmPassword: z.string().min(1, "Please confirm your password") })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type FormValues = z.infer<typeof formSchema>;
+
 export function MenteeRegistrationForm() {
   const router = useRouter();
-  const form = useForm<MenteeRegistrationInput>({
-    resolver: zodResolver(menteeRegistrationSchema),
+  const { departments, programmes } = useCatalog();
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       role: "MENTEE",
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
       phone: "",
       registrationNumber: "",
       department: undefined,
@@ -58,11 +67,12 @@ export function MenteeRegistrationForm() {
     },
   });
 
-  async function onSubmit(values: MenteeRegistrationInput) {
+  async function onSubmit(values: FormValues) {
+    const { confirmPassword: _confirmPassword, ...payload } = values;
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify(payload),
     });
     const data = (await res.json()) as { error?: string; message?: string };
 
@@ -129,6 +139,19 @@ export function MenteeRegistrationForm() {
               />
               <FormField
                 control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm password</FormLabel>
+                    <FormControl>
+                      <PasswordInput autoComplete="new-password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
@@ -166,7 +189,7 @@ export function MenteeRegistrationForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {PROGRAMMES.map((programme) => (
+                        {programmes.map((programme) => (
                           <SelectItem key={programme} value={programme}>
                             {programme}
                           </SelectItem>
@@ -190,7 +213,7 @@ export function MenteeRegistrationForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {DEPARTMENTS.map((department) => (
+                        {departments.map((department) => (
                           <SelectItem key={department} value={department}>
                             {department}
                           </SelectItem>

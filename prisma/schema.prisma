@@ -171,9 +171,24 @@ model Interest {
   id       String  @id @default(cuid())
   name     String  @unique
   isCustom Boolean @default(false)
+  isActive Boolean @default(true)
 
   mentors MentorInterest[]
   mentees MenteeInterest[]
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Programme {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
 }
 
 model MentorInterest {

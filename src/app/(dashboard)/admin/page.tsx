@@ -27,21 +27,21 @@ export const metadata = { title: "Admin dashboard" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const stats = await getDashboardStats();
-
-  const recentPending = await db.user.findMany({
-    where: { status: "PENDING" },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
-  });
-
-  const waitlisted = await db.menteeProfile.findMany({
-    where: { waitlisted: true, user: { status: "APPROVED" } },
-    include: { user: { select: { name: true, email: true } } },
-    orderBy: { waitlistedAt: "asc" },
-    take: 5,
-  });
+  const [stats, recentPending, waitlisted] = await Promise.all([
+    getDashboardStats(),
+    db.user.findMany({
+      where: { status: "PENDING" },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: { id: true, name: true, email: true, role: true, createdAt: true },
+    }),
+    db.menteeProfile.findMany({
+      where: { waitlisted: true, user: { status: "APPROVED" } },
+      include: { user: { select: { name: true, email: true } } },
+      orderBy: { waitlistedAt: "asc" },
+      take: 5,
+    }),
+  ]);
 
   return (
     <>

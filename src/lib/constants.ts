@@ -1,29 +1,10 @@
 export const APP_NAME =
   process.env.NEXT_PUBLIC_APP_NAME ?? "Menty";
 
-export const DEPARTMENTS = [
-  "Civil Department",
-  "Mechanical Department",
-  "Electrical Department",
-  "Mining Department",
-] as const;
-
-export const PROGRAMMES = [
-  "BSc Civil Engineering Structures",
-  "BSc Civil Engineering Water",
-  "BSc Civil Engineering Transport",
-  "BSc Mechanical Engineering",
-  "BSc Energy Engineering", 
-  "BSc Automobile Engineering",
-  "BSc Industrial Engineering",
-  "BSc Electrical & Electronics Engineering",
-  "BSc Biomedical Engineering",
-  "BSc Electronics & Computer Engineering",
-  "BSc Electronics & Telecommunications Engineering",
-  "BSc Metallurgy & Mineral Processing Engineering",
-  "BSc Mining Engineering",
-  "BSc Geogical Engineering",
-] as const;
+// Departments and programmes moved to the Department/Programme tables
+// (admin-managed via /admin/catalog) — see prisma/migrations/
+// 20260804000000_catalog_tables, which seeds them with these same
+// values so existing deployments keep working unchanged.
 
 export const STRONG_MODULES = [
   "College Algebra",

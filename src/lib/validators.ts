@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  DEPARTMENTS,
-  PROGRAMMES,
-  MAX_CUSTOM_INTEREST_LENGTH,
-} from "@/lib/constants";
+import { MAX_CUSTOM_INTEREST_LENGTH } from "@/lib/constants";
 
 // ------------------------------------------------------------------
 // Shared primitives
@@ -43,13 +39,21 @@ export const registrationNumberSchema = z
   .min(3, "Registration number is too short")
   .max(30, "Registration number is too long");
 
-const departmentSchema = z.enum(DEPARTMENTS, {
-  errorMap: () => ({ message: "Select a department" }),
-});
+// Department/programme names now live in the Department/Programme tables
+// (admin-managed) rather than a hardcoded enum. Shape is validated here;
+// membership in the current catalog is checked against the database at
+// the registration API route.
+const departmentSchema = z
+  .string()
+  .trim()
+  .min(1, "Select a department")
+  .max(120);
 
-const programmeSchema = z.enum(PROGRAMMES, {
-  errorMap: () => ({ message: "Select a programme" }),
-});
+const programmeSchema = z
+  .string()
+  .trim()
+  .min(1, "Select a programme")
+  .max(120);
 
 const interestsSchema = z
   .array(z.string().trim().min(1).max(MAX_CUSTOM_INTEREST_LENGTH))
@@ -262,3 +266,20 @@ export const manualPairingSchema = z.object({
 export const reassignSchema = z.object({
   mentorProfileId: z.string().min(1),
 });
+
+// ------------------------------------------------------------------
+// Catalog (departments, programmes, interests) — admin managed
+// ------------------------------------------------------------------
+
+export const catalogItemCreateSchema = z.object({
+  name: z.string().trim().min(2, "Too short").max(120, "Too long"),
+});
+
+export type CatalogItemCreateInput = z.infer<typeof catalogItemCreateSchema>;
+
+export const catalogItemUpdateSchema = z.object({
+  name: z.string().trim().min(2, "Too short").max(120, "Too long").optional(),
+  isActive: z.boolean().optional(),
+});
+
+export type CatalogItemUpdateInput = z.infer<typeof catalogItemUpdateSchema>;

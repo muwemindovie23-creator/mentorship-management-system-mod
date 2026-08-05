@@ -61,6 +61,21 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
+  const [department, programme] = await Promise.all([
+    db.department.findFirst({
+      where: { name: { equals: data.department, mode: "insensitive" }, isActive: true },
+    }),
+    db.programme.findFirst({
+      where: { name: { equals: data.programme, mode: "insensitive" }, isActive: true },
+    }),
+  ]);
+  if (!department) {
+    return Response.json({ error: "Select a valid department." }, { status: 422 });
+  }
+  if (!programme) {
+    return Response.json({ error: "Select a valid programme." }, { status: 422 });
+  }
+
   const regNumberTaken =
     data.role === "MENTOR"
       ? await db.mentorProfile.findFirst({
@@ -104,8 +119,8 @@ export async function POST(req: Request): Promise<Response> {
           semesterId: semester.id,
           registrationNumber: sanitizeText(data.registrationNumber),
           yearOfStudy: data.yearOfStudy,
-          programme: data.programme,
-          department: data.department,
+          programme: programme.name,
+          department: department.name,
           strongModules: data.strongModules.map(sanitizeText),
           hoursPerWeek: data.hoursPerWeek,
           maxMentees: data.maxMentees,
@@ -124,8 +139,8 @@ export async function POST(req: Request): Promise<Response> {
           userId: created.id,
           semesterId: semester.id,
           registrationNumber: sanitizeText(data.registrationNumber),
-          programme: data.programme,
-          department: data.department,
+          programme: programme.name,
+          department: department.name,
           sameDepartmentPreferred: data.sameDepartmentPreferred,
         },
       });

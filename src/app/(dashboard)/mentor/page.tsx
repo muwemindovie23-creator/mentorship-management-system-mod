@@ -49,15 +49,16 @@ export default async function MentorDashboardPage() {
     );
   }
 
-  const meetingsCount = await db.meeting.count({
-    where: { pairing: { mentorProfileId: profile.id } },
-  });
-
-  const announcements = await db.announcement.findMany({
-    where: { audience: { in: ["ALL", "MENTORS"] } },
-    orderBy: { createdAt: "desc" },
-    take: 3,
-  });
+  const [meetingsCount, announcements] = await Promise.all([
+    db.meeting.count({
+      where: { pairing: { mentorProfileId: profile.id } },
+    }),
+    db.announcement.findMany({
+      where: { audience: { in: ["ALL", "MENTORS"] } },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    }),
+  ]);
 
   return (
     <>

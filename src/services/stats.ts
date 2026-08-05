@@ -59,22 +59,26 @@ export async function getAnalytics(): Promise<AnalyticsData> {
   const activeSemester = await getActiveSemester();
   const semesterId = activeSemester?.id;
 
-  const pairings = await db.pairing.findMany({
-    where: semesterId ? { semesterId, status: "ACTIVE" } : { status: "ACTIVE" },
-    include: { menteeProfile: { select: { department: true } } },
-  });
+  const [pairings, meetings, interestCounts] = await Promise.all([
+    db.pairing.findMany({
+      where: semesterId ? { semesterId, status: "ACTIVE" } : { status: "ACTIVE" },
+      include: { menteeProfile: { select: { department: true } } },
+    }),
+    db.meeting.findMany({
+      where: semesterId ? { pairing: { semesterId } } : {},
+      select: { date: true },
+      orderBy: { date: "asc" },
+    }),
+    db.interest.findMany({
+      include: { _count: { select: { mentors: true, mentees: true } } },
+    }),
+  ]);
 
   const byDept = new Map<string, number>();
   for (const p of pairings) {
     const d = p.menteeProfile.department;
     byDept.set(d, (byDept.get(d) ?? 0) + 1);
   }
-
-  const meetings = await db.meeting.findMany({
-    where: semesterId ? { pairing: { semesterId } } : {},
-    select: { date: true },
-    orderBy: { date: "asc" },
-  });
 
   const byWeek = new Map<string, number>();
   for (const m of meetings) {
@@ -87,10 +91,6 @@ export async function getAnalytics(): Promise<AnalyticsData> {
     const key = `${year}-W${String(week).padStart(2, "0")}`;
     byWeek.set(key, (byWeek.get(key) ?? 0) + 1);
   }
-
-  const interestCounts = await db.interest.findMany({
-    include: { _count: { select: { mentors: true, mentees: true } } },
-  });
 
   return {
     pairingsByDepartment: [...byDept.entries()]

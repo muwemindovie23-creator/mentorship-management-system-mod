@@ -39,6 +39,9 @@ const CATEGORIES = [
   { value: "announcement", label: "Announcements" },
   { value: "email", label: "Bulk email" },
   { value: "data", label: "Import / export" },
+  { value: "department", label: "Departments" },
+  { value: "programme", label: "Programmes" },
+  { value: "interest", label: "Interests" },
 ];
 
 function describe(log: AuditLogRow): string {
@@ -77,6 +80,18 @@ function describe(log: AuditLogRow): string {
       return `Imported ${s("type")} — ${m.created ?? 0} created, ${m.skipped ?? 0} skipped`;
     case "data.export":
       return `Exported ${s("type")}`;
+    case "department.create":
+      return `Added department "${s("name")}"`;
+    case "department.update":
+      return `Updated department "${s("name")}" (${m.isActive ? "active" : "inactive"})`;
+    case "programme.create":
+      return `Added programme "${s("name")}"`;
+    case "programme.update":
+      return `Updated programme "${s("name")}" (${m.isActive ? "active" : "inactive"})`;
+    case "interest.create":
+      return `Added interest "${s("name")}"`;
+    case "interest.update":
+      return `Updated interest "${s("name")}" (${m.isActive ? "active" : "inactive"})`;
     default:
       return log.action;
   }
