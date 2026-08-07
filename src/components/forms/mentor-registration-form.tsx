@@ -18,7 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -39,6 +38,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { InterestPicker } from "@/components/forms/interest-picker";
+import { StrongModulePicker } from "@/components/forms/strong-module-picker";
 
 const formSchema = mentorRegistrationSchema
   .extend({ confirmPassword: z.string().min(1, "Please confirm your password") })
@@ -266,28 +266,16 @@ export function MentorRegistrationForm() {
                 <FormItem>
                   <FormLabel>Strong modules</FormLabel>
                   <FormDescription>
-                    Pick the modules you feel confident helping with.
+                    Pick the modules you feel confident helping with, or add
+                    your own if it&apos;s not listed.
                   </FormDescription>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {strongModules.map((module) => (
-                      <label
-                        key={module}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <Checkbox
-                          checked={field.value.includes(module)}
-                          onCheckedChange={(checked) => {
-                            field.onChange(
-                              checked
-                                ? [...field.value, module]
-                                : field.value.filter((m) => m !== module)
-                            );
-                          }}
-                        />
-                        {module}
-                      </label>
-                    ))}
-                  </div>
+                  <FormControl>
+                    <StrongModulePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      predefined={strongModules}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

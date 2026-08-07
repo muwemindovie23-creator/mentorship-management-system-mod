@@ -4,6 +4,7 @@ import { registrationSchema } from "@/lib/validators";
 import { rateLimit, clientKey } from "@/lib/rate-limit";
 import { sanitizeText } from "@/lib/sanitize";
 import { resolveInterestIds } from "@/lib/interests";
+import { resolveStrongModules } from "@/lib/strong-modules";
 import { sendMail } from "@/lib/email/mailer";
 import { verifyEmailEmail, APP_URL } from "@/lib/email/templates";
 import { generateVerificationToken } from "@/lib/tokens";
@@ -99,6 +100,8 @@ export async function POST(req: Request): Promise<Response> {
 
   const passwordHash = await bcrypt.hash(data.password, 12);
   const interestIds = await resolveInterestIds(data.interests);
+  const resolvedStrongModules =
+    data.role === "MENTOR" ? await resolveStrongModules(data.strongModules) : [];
 
   const user = await db.$transaction(async (tx) => {
     const created = await tx.user.create({
@@ -121,7 +124,7 @@ export async function POST(req: Request): Promise<Response> {
           yearOfStudy: data.yearOfStudy,
           programme: programme.name,
           department: department.name,
-          strongModules: data.strongModules.map(sanitizeText),
+          strongModules: resolvedStrongModules,
           hoursPerWeek: data.hoursPerWeek,
           maxMentees: data.maxMentees,
           crossDepartment: data.crossDepartment,
